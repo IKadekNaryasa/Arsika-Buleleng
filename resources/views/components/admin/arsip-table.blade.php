@@ -28,7 +28,7 @@
                                      <li
                                          data-bs-toggle="tooltip"
                                          data-popup="tooltip-custom"
-                                         data-bs-placement="top"
+                                         data-bs-placement="left"
                                          class="pull-up"
                                          title="Pratinjau">
                                          <a href="{{ route('arsip.show', $arsip->id) }}" target="_blank" class="mx-2 text-primary">

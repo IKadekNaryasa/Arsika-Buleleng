@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
     {
         User::create([
             'id' => Str::uuid()->toString(),
-            'bidang_id' => '131695ba-ff79-4c31-a492-8fb99b672f65',
+            'bidang_id' => '00d69567-4128-4a8a-aa0f-daf18b1336eb',
             'name' => 'I Kadek Naryasa, S.Kom',
             'role' => 'operator',
             'email' => 'qy.naryasa@gmail.com',

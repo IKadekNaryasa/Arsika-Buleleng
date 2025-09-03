@@ -62,10 +62,8 @@ class ArsipController extends Controller
         }
 
         try {
-            // $user_id = Auth::user()->id;
-            $user_id = 'a1a2de7f-ad53-439f-8b45-231414ad1fd2';
-            // $bidang = Auth::user()->bidang->kode_bidang;
-            $bidang = 'BID-III';
+            $user_id = Auth::user()->id;
+            $bidang = Auth::user()->bidang->kode_bidang;
             $kodeArsip = 'ARSP-BKBP-' . $bidang . '-' . date('Ymd') . '-' . uniqid();
             $file = $request->file('nama_file');
             $originalFileName = $file->getClientOriginalName();

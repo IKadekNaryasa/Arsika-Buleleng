@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('arsips', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('kode_arsip', 100)->unique();
+            $table->string('kode_arsip', 100)->unique()->index('arsip_kodeArsip');
             $table->enum('kategori', ['arsip_aktif', 'arsip_inAktif', 'lainnya'])->default('arsip_aktif');
             $table->string('kode_klasifikasi');
             $table->date('tanggal_arsip');
-            $table->string('nama_file');
+            $table->string('nama_file')->index('arsip_namaFile');
             $table->text('uraian');
-            $table->string('path_file');
+            $table->string('path_file')->index('arsip_pathFile');
             $table->enum('status_legalisasi', ['onProgress', 'legal'])->default('onProgress');
             $table->foreignUuid('user_id')->constrained('users', 'id')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
