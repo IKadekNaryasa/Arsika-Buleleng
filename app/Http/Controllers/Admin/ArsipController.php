@@ -154,11 +154,11 @@ class ArsipController extends Controller
             }
 
             $fileContent = Storage::disk('google')->get($filePath);
-            $mimeType = Storage::disk('google')->mimeType($filePath);
 
-            $originalExtension = pathinfo($filePath, PATHINFO_EXTENSION);
+            $originalExtension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+            $mimeType = $this->getMimeTypeByExtension($originalExtension);
+
             $fileName = $arsip->kode_arsip . '.' . $originalExtension;
-
 
             return response($fileContent)
                 ->header('Content-Type', $mimeType)
@@ -168,8 +168,30 @@ class ArsipController extends Controller
                 ->header('Cache-Control', 'public, max-age=3600')
                 ->header('Pragma', 'public');
         } catch (Exception $e) {
-            return response('Error: ' . $e->getMessage(), 500);
+            abort(404, 'Path file tidak ditemukan dalam database');
         }
+    }
+
+    private function getMimeTypeByExtension($extension)
+    {
+        $mimeTypes = [
+            'pdf' => 'application/pdf',
+            'doc' => 'application/msword',
+            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'xls' => 'application/vnd.ms-excel',
+            'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'ppt' => 'application/vnd.ms-powerpoint',
+            'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            'txt' => 'text/plain',
+            'zip' => 'application/zip',
+            'rar' => 'application/x-rar-compressed',
+        ];
+
+        return $mimeTypes[$extension] ?? 'application/octet-stream';
     }
     /**
      * Show the form for editing the specified resource.
