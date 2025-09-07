@@ -64,7 +64,7 @@ class ArsipController extends Controller
         try {
             $user_id = Auth::user()->id;
             $bidang = Auth::user()->bidang->kode_bidang;
-            $kodeArsip = 'ARSP-BKBP-' . $bidang . '-' . date('Ymd') . '-' . uniqid();
+            $kodeArsip = 'ARSP-BKBP-' . $bidang . '-' . str_replace('-', '', $request->tanggal_arsip) . '-' . uniqid();
             $file = $request->file('nama_file');
             $originalFileName = $file->getClientOriginalName();
             $fileName = $kodeArsip . '_' . $originalFileName;

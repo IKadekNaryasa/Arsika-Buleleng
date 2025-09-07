@@ -9,4 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 
-Schedule::command('google:refresh-token')->hourly();
+Schedule::command('google:refresh-token')->everyFifteenMinutes();
