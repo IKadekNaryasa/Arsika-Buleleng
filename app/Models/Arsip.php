@@ -20,6 +20,7 @@ class Arsip extends Model
         'path_file',
         'status_legalisasi',
         'user_id',
+        'jumlah'
     ];
 
     protected static function boot()

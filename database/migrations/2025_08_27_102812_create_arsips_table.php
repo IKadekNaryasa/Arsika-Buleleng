@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('kode_klasifikasi');
             $table->date('tanggal_arsip');
             $table->string('nama_file')->index('arsip_namaFile');
+            $table->integer('jumlah');
             $table->text('uraian');
             $table->string('path_file')->index('arsip_pathFile');
             $table->enum('status_legalisasi', ['onProgress', 'legal'])->default('onProgress');

@@ -50,89 +50,99 @@ class ArsipController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
-                'kategori_arsip' => 'required|in:arsip_aktif,arsip_inAktif,lainnya',
-                'kode_klasifikasi' => 'required|string|max:255',
-                'tanggal_arsip' => 'required|date',
-                'nama_file' => 'required|mimes:pdf|max:20240',
-                'uraian' => 'required|string',
-            ]);
+            $rules = [];
+            $arsipData = $request->input('arsip', []);
+
+            foreach ($arsipData as $index => $data) {
+                $rules["arsip.{$index}.kategori_arsip"] = 'required|in:arsip_aktif,arsip_inAktif,lainnya';
+                $rules["arsip.{$index}.kode_klasifikasi"] = 'required|string|max:255';
+                $rules["arsip.{$index}.tanggal_arsip"] = 'required|date';
+                $rules["arsip.{$index}.nama_file"] = 'required|mimes:pdf|max:20240';
+                $rules["arsip.{$index}.uraian"] = 'required|string';
+                $rules["arsip.{$index}.jumlah"] = 'required|numeric|min:1';
+            }
+
+            $request->validate($rules);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            return redirect()->route('arsip.create')->withErrors(['errors' => $e->errors()])->withInput();
+            return redirect()->route('arsip.create')
+                ->withErrors(['errors' => $e->errors()])
+                ->withInput();
         }
 
         try {
-            $user_id = Auth::user()->id;
-            $bidang = Auth::user()->bidang->kode_bidang;
-            $kodeArsip = 'ARSP-BKBP-' . $bidang . '-' . str_replace('-', '', $request->tanggal_arsip) . '-' . uniqid();
-            $file = $request->file('nama_file');
-            $originalFileName = $file->getClientOriginalName();
-            $fileName = $kodeArsip . '_' . $originalFileName;
-
-            $folderPath = "Belum_dilegalisasi";
-            $filePath = $folderPath . '/' . $fileName;
-
-
+            // Test koneksi Google Drive 
             try {
                 Storage::disk('google')->put('test.txt', 'test content');
                 Storage::disk('google')->delete('test.txt');
-                // Log::info('Google Drive connection test: SUCCESS');
             } catch (\Exception $testError) {
-                return redirect()->route('arsip.create')->withErrors(['errors' => 'Gagal terhubung ke Drive!'])->withInput();
+                return redirect()->route('arsip.create')
+                    ->withErrors(['errors' => 'Gagal terhubung ke Drive!'])
+                    ->withInput();
             }
 
-            $uploaded = Storage::disk('google')->put($filePath, file_get_contents($file));
+            $user_id = Auth::user()->id;
+            $bidang = Auth::user()->bidang->kode_bidang;
+            $successCount = 0;
+            $failedFiles = [];
 
-            if ($uploaded) {
-                // Log::info('File berhasil diupload ke Google Drive');
+            foreach ($arsipData as $index => $data) {
+                try {
+                    $kodeArsip = 'ARSP-BKBP-' . $bidang . '-' . str_replace('-', '', $data['tanggal_arsip']) . '-' . uniqid();
 
-                Arsip::create([
-                    'kode_arsip' => $kodeArsip,
-                    'kategori' => $request->kategori_arsip,
-                    'kode_klasifikasi' => $request->kode_klasifikasi,
-                    'tanggal_arsip' => $request->tanggal_arsip,
-                    'nama_file' => $originalFileName,
-                    'uraian' => $request->uraian,
-                    'path_file' => $filePath,
-                    'status_legalisasi' => 'onProgress',
-                    'user_id' => $user_id,
-                ]);
+                    $file = $request->file("arsip.{$index}.nama_file");
+                    $originalFileName = $file->getClientOriginalName();
+                    $fileName = $kodeArsip . '_' . $originalFileName;
 
+                    $folderPath = "Belum_dilegalisasi";
+                    $filePath = $folderPath . '/' . $fileName;
 
-                // return response()->json([
-                //     'status' => 'success',
-                //     'message' => 'Arsip berhasil ditambahkan dan diupload ke Google Drive',
-                //     'data' => [
-                //         'kode_arsip' => $kodeArsip,
-                //         'nama_file' => $originalFileName,
-                //         'path_file' => $filePath
-                //     ]
-                // ], 200);
+                    $uploaded = Storage::disk('google')->put($filePath, file_get_contents($file));
 
-                return redirect()->route('arsip.index')->with('success', 'Arsip Berhasil ditambahkan!');
+                    if ($uploaded) {
+                        // Simpan data ke database
+                        Arsip::create([
+                            'kode_arsip' => $kodeArsip,
+                            'kategori' => $data['kategori_arsip'],
+                            'kode_klasifikasi' => $data['kode_klasifikasi'],
+                            'tanggal_arsip' => $data['tanggal_arsip'],
+                            'nama_file' => $originalFileName,
+                            'uraian' => $data['uraian'],
+                            'path_file' => $filePath,
+                            'status_legalisasi' => 'onProgress',
+                            'user_id' => $user_id,
+                            'jumlah' => $data['jumlah']
+                        ]);
+
+                        $successCount++;
+                    } else {
+                        $failedFiles[] = $originalFileName;
+                    }
+                } catch (\Exception $e) {
+                    $failedFiles[] = $data['nama_file'] ?? "File #" . ($index + 1);
+                    // Log error untuk debugging
+                    // Log::error('Error upload arsip index ' . $index, [
+                    //     'message' => $e->getMessage(),
+                    //     'data' => $data
+                    // ]);
+                }
+            }
+
+            if ($successCount > 0 && empty($failedFiles)) {
+                return redirect()->route('arsip.index')
+                    ->with('success', "Berhasil menambahkan {$successCount} arsip!");
+            } elseif ($successCount > 0 && !empty($failedFiles)) {
+                $failedList = implode(', ', $failedFiles);
+                return redirect()->route('arsip.index')
+                    ->with('warning', "Berhasil menambahkan {$successCount} arsip. Gagal upload: {$failedList}");
             } else {
-                return redirect()->route('arsip.create')->withErrors(['errors' => 'Gagal menambahkan arsip!'])->withInput();
+                return redirect()->route('arsip.create')
+                    ->withErrors(['errors' => 'Semua file gagal diupload!'])
+                    ->withInput();
             }
         } catch (\Exception $e) {
-
-            return redirect()->route('arsip.create')->withErrors(['errors' => 'Gagal Upload  arsip!'])->withInput();
-
-            // Log::error('Error upload arsip:', [
-            //     'message' => $e->getMessage(),
-            //     'file' => $e->getFile(),
-            //     'line' => $e->getLine(),
-            //     'trace' => $e->getTraceAsString()
-            // ]);
-
-            // return response()->json([
-            //     'status' => 'error',
-            //     'message' => 'Gagal upload file: ' . $e->getMessage(),
-            //     'debug_info' => config('app.debug') ? [
-            //         'error' => $e->getMessage(),
-            //         'file' => $e->getFile(),
-            //         'line' => $e->getLine()
-            //     ] : null
-            // ], 500);
+            return redirect()->route('arsip.create')
+                ->withErrors(['errors' => 'Terjadi kesalahan sistem: ' . $e->getMessage()])
+                ->withInput();
         }
     }
 
