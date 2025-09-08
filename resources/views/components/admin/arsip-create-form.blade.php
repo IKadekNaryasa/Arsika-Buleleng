@@ -129,6 +129,7 @@
             formIndex++;
         });
 
+
         function createNewForm(index) {
             return `
             <div class="form-item border p-3 mb-3 rounded" data-index="${index}">
@@ -207,6 +208,14 @@
                 removeButtons.forEach(btn => btn.classList.remove('d-none'));
             }
         }
+
+        arsipForm.addEventListener('submit', function(e) {
+            loadingOverlay.classList.remove('d-none');
+            arsipForm.classList.add('form-disabled');
+            submitBtn.disabled = true;
+            submitText.textContent = 'Menyimpan arsip, mohon tunggu...';
+            submitSpinner.classList.remove('d-none');
+        });
 
     });
 </script>
