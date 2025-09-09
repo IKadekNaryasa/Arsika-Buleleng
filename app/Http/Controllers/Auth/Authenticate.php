@@ -42,7 +42,7 @@ class Authenticate extends Controller
                     'user' => $user
                 ]);
             }
-            return redirect()->intended(route('arsip.index'));
+            return redirect()->intended(route('arsip.index'))->with('success', 'Loggin Success!');
         }
 
         if ($request->expectsJson()) {
@@ -63,6 +63,6 @@ class Authenticate extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')->with('status', 'Anda telah logout');
+        return redirect()->route('login')->with('success', 'Anda telah logout');
     }
 }

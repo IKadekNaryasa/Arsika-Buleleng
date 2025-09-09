@@ -65,8 +65,30 @@
         <div class="toast-body">{{session('success')}}</div>
     </div>
     @endif
-    @if (session('error'))
-    <h1 class="text-danger">{{ session('error') }}</h1>
+
+    @if ($errors->any())
+    <div
+        id="toast"
+        class="bs-toast toast toast-placement-ex m-2  position-fixed top-0 end-0 bg-danger"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        data-bs-delay="5000"
+        data-bs-autohide="true">
+        <div class="toast-header">
+            <i class="bx bx-bell me-2"></i>
+            <div class="me-auto fw-semibold">Error!</div>
+            <small>{{ date('l, d F Y') }}</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    </div>
     @endif
     <!-- Content -->
 

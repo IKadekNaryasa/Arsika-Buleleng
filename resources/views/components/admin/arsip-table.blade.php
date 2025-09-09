@@ -145,12 +145,12 @@
                                                     </div>
                                                     <hr>
                                                     @if ($arsip->status_legalisasi == 'onProgress')
-                                                    <div class="row mb-2">
+                                                    <!-- <div class="row mb-2">
                                                         <form action="" method="">
                                                             @csrf
                                                             <div class="col-12"><strong>LEGALISASI</strong> : <button class="btn btn-primary btn-sm">Tambahkan Legalisasi</button></div>
                                                         </form>
-                                                    </div>
+                                                    </div> -->
                                                     @endif
                                                 </div>
                                             </div>
