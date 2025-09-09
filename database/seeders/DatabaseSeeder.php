@@ -18,10 +18,10 @@ class DatabaseSeeder extends Seeder
     {
         User::create([
             'id' => Str::uuid()->toString(),
-            'bidang_id' => '436fe984-b732-45c0-915d-090598c17366',
+            'bidang_id' => 'dd048bbe-1a66-43c7-aaa9-00e39e1febbd',
             'name' => 'I Kadek Naryasa, S.Kom',
             'role' => 'operator',
-            'email' => 'qy.naryasa@gmail.com',
+            'email' => 'iknproject1125@gmail.com',
             'email_verified_at' => now(),
             'password' => Hash::make('12345678')
         ]);

@@ -2,18 +2,26 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\Bidang;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class BidangController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $users = User::with('bidang')->get();
+        $data = [
+            'active' => '',
+            'link' => '',
+            'open' => '',
+            'users' => $users
+        ];
+        return view('admin.user.index', $data);
     }
 
     /**
@@ -21,7 +29,14 @@ class BidangController extends Controller
      */
     public function create()
     {
-        //
+        $bidangs = Bidang::all();
+        $data = [
+            'active' => '',
+            'open' => '',
+            'link' => '',
+            'bidangs' => $bidangs,
+        ];
+        return view('admin.user.create', $data);
     }
 
     /**
@@ -35,7 +50,7 @@ class BidangController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Bidang $bidang)
+    public function show(User $user)
     {
         //
     }
@@ -43,7 +58,7 @@ class BidangController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Bidang $bidang)
+    public function edit(User $user)
     {
         //
     }
@@ -51,7 +66,7 @@ class BidangController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Bidang $bidang)
+    public function update(Request $request, User $user)
     {
         //
     }
@@ -59,7 +74,7 @@ class BidangController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Bidang $bidang)
+    public function destroy(User $user)
     {
         //
     }

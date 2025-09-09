@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Operator;
 
 use App\Models\Arsip;
 use App\Models\Bidang;
@@ -25,7 +25,7 @@ class ArsipController extends Controller
             'link' => 'Arsip | Data Arsip',
             'arsips' => $arsips
         ];
-        return view('admin.arsip.index', $data);
+        return view('operator.arsip.index', $data);
     }
 
     /**
@@ -40,7 +40,7 @@ class ArsipController extends Controller
             'link' => 'Arsip | Tambah Arsip',
             'bidangs' => $bidangs
         ];
-        return view('admin.arsip.create', $data);
+        return view('operator.arsip.create', $data);
     }
 
     /**

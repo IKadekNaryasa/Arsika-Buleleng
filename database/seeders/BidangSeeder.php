@@ -30,5 +30,10 @@ class BidangSeeder extends Seeder
             'kode_bidang' => 'BID-III',
             'nama_bidang' => 'Bidang Pengembangan Budaya Politik'
         ]);
+        Bidang::create([
+            'id' => Str::uuid()->toString(),
+            'kode_bidang' => 'UMUM',
+            'nama_bidang' => 'Sekretariat Kesbangpol'
+        ]);
     }
 }

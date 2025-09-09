@@ -13,3 +13,6 @@ Route::middleware('web')->group(base_path('routes/arsip.php'));
 
 // Authentication
 Route::middleware('web')->group(base_path('routes/auth.php'));
+
+// Authentication
+Route::middleware('web')->group(base_path('routes/user.php'));

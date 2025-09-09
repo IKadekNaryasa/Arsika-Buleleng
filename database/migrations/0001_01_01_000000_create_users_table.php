@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('bidang_id')->constrained('bidangs', 'id')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('name');
-            $table->enum('role', ['operator', 'kepala_badan'])->default('operator');
+            $table->enum('role', ['operator', 'kepala_badan', 'admin'])->default('operator');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
