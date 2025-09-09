@@ -5,7 +5,7 @@
             <span class="visually-hidden">Loading...</span>
         </div>
         <h5 class="text-primary">Menyimpan Arsip...</h5>
-        <p class="text-muted">Mohon tunggu, sedang mengupload file ke Google Drive</p>
+        <p class="text-muted">Mohon tunggu, sedang mengupload file!</p>
     </div>
 </div>
 

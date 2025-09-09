@@ -224,6 +224,32 @@ class ArsipController extends Controller
      */
     public function destroy(Arsip $arsip)
     {
-        //
+        try {
+            $filePath = $arsip->path_file;
+            $fileName = $arsip->nama_file;
+            $kodeArsip = $arsip->kode_arsip;
+
+            $fileDeleted = false;;
+            if ($filePath) {
+                try {
+                    if (Storage::disk('google')->exists($filePath)) {
+                        $fileDeleted = Storage::disk('google')->delete($filePath);
+                    } else {
+                        $fileDeleted = true;
+                    }
+                } catch (\Exception $driverError) {
+                    return redirect()->route('arsip.index')
+                        ->withErrors(['errors' => 'Gagal menghapus file dari Google Drive']);
+                }
+            } else {
+                $fileDeleted = true;
+            }
+
+            $arsip->delete();
+
+            return redirect()->route('arsip.index')->with('success', 'Data dan File berhasil dihapus!');
+        } catch (Exception $e) {
+            return redirect()->route('arsip.index')->withErrors(['errors' => 'Gagal menghapus data!']);
+        }
     }
 }
