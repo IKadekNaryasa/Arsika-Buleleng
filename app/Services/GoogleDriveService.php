@@ -4,8 +4,7 @@ namespace App\Services;
 
 use Google\Client;
 use Google\Service\Drive;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Cache;
+use App\Models\GoogleAccessToken;
 
 class GoogleDriveService
 {
@@ -22,32 +21,29 @@ class GoogleDriveService
 
     public function getValidAccessToken()
     {
-        $cachedToken = Cache::get('google_drive_access_token');
+        $dbToken = GoogleAccessToken::first();
 
-        if ($cachedToken && !$this->isTokenExpired($cachedToken)) {
-            return $cachedToken;
-        }
+        if ($dbToken) {
+            $this->client->setAccessToken(['access_token' => $dbToken->access_token]);
 
-        // Refresh token
-        $this->client->setAccessToken([
-            'access_token' => config('filesystems.disks.google.accessToken'),
-            'refresh_token' => config('filesystems.disks.google.refreshToken'),
-        ]);
+            if ($this->client->isAccessTokenExpired()) {
+                $newToken = $this->client->fetchAccessTokenWithRefreshToken(
+                    config('filesystems.disks.google.refreshToken')
+                );
 
-        if ($this->client->isAccessTokenExpired()) {
-            $this->client->fetchAccessTokenWithRefreshToken(config('filesystems.disks.google.refreshToken'));
-            $newToken = $this->client->getAccessToken();
+                if (isset($newToken['access_token'])) {
+                    $dbToken->update([
+                        'access_token' => $newToken['access_token'],
+                        'expires_at'   => now()->addSeconds($newToken['expires_in'] ?? 3600),
+                    ]);
 
-            Cache::put('google_drive_access_token', $newToken['access_token'], now()->addMinutes(55));
+                    return $newToken['access_token'];
+                }
+            }
 
-            return $newToken['access_token'];
+            return $dbToken->access_token;
         }
 
         return config('filesystems.disks.google.accessToken');
-    }
-
-    private function isTokenExpired($token)
-    {
-        return false;
     }
 }

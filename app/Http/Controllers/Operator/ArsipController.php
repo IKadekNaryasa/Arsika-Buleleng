@@ -6,6 +6,7 @@ use App\Models\Arsip;
 use App\Models\Bidang;
 use Illuminate\Http\Request;
 use Psy\Exception\Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -70,8 +71,9 @@ class ArsipController extends Controller
         }
 
         try {
-            // Test koneksi Google Drive 
             try {
+                $token = DB::table('google_access_tokens')->where('id', 1)->value('access_token');
+                config(['filesystems.disks.google.accessToken' => $token]);
                 Storage::disk('google')->put('test.txt', 'test content');
                 Storage::disk('google')->delete('test.txt');
             } catch (\Exception $testError) {
