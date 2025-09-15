@@ -102,9 +102,9 @@
                 <div class="app-brand demo">
                     <a href="index.html" class="app-brand-link">
                         <span class="app-brand-logo demo">
-                            <img src="{{ asset('favicon.png') }}" alt="ToolKit" width="80">
+                            <img src="{{ asset('img/arsika.png') }}" alt="ARSIKA" width="80">
                         </span>
-                        <span class="app-brand-text demo menu-text fw-semibold ms-2" style="text-transform: none; font-size: 20px; color: #333;">ARSIKA</span>
+                        <span class="app-brand-text demo menu-text fw-semibold ms-2" style="text-transform: none; font-size: 20px; color: #333;">Buleleng</span>
                     </a>
 
                     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
