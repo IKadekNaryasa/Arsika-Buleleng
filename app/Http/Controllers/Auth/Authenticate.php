@@ -42,7 +42,7 @@ class Authenticate extends Controller
                     'user' => $user
                 ]);
             }
-            return redirect()->intended(route('arsip.index'))->with('success', 'Loggin Success!');
+            return redirect()->intended(route('dashboard'))->with('success', 'Loggin Success!');
         }
 
         if ($request->expectsJson()) {

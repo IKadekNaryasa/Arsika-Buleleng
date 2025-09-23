@@ -49,8 +49,12 @@
                                 </select>
                             </div>
                             <div class="col-md-2 mb-3">
-                                <label class="form-label">Jumlah</label>
-                                <input type="number" name="arsip[0][jumlah]" class="form-control" value="1" required min="1">
+                                <label class="form-label">Type</label>
+                                <select name="arsip[0][type]" class="form-control" required>
+                                    <option value="asli" selected>Asli</option>
+                                    <option value="copy">Copy</option>
+                                    <option value="copy-Asli">Copy, Asli</option>
+                                </select>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Upload File (*.pdf)</label>
@@ -164,10 +168,14 @@
                             <option value="belum" selected>Belum Dilegalisasi</option>
                         </select>
                     </div>
-                    <div class="col-md-2 mb-3">
-                        <label class="form-label">Jumlah</label>
-                        <input type="number" name="arsip[${index}][jumlah]" class="form-control" value="1" required min="1">
-                    </div>
+                     <div class="col-md-2 mb-3">
+                        <label class="form-label">Type</label>
+                            <select name="arsip[${index}][type]" class="form-control" required>
+                                <option value="asli" selected>Asli</option>
+                                <option value="copy" >Copy</option>
+                                <option value="copy-Asli" >Copy, Asli</option>
+                            </select>
+                        </div>                  
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Upload File (*.pdf)</label>
                         <input type="file" name="arsip[${index}][nama_file]" class="form-control" required accept=".pdf">

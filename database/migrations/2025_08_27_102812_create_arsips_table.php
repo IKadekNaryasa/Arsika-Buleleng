@@ -18,10 +18,10 @@ return new class extends Migration
             $table->string('kode_klasifikasi');
             $table->date('tanggal_arsip');
             $table->string('nama_file')->index('arsip_namaFile');
-            $table->integer('jumlah');
             $table->text('uraian');
             $table->string('path_file')->index('arsip_pathFile');
             $table->enum('status_legalisasi', ['onProgress', 'legal'])->default('onProgress');
+            $table->enum('type', ['copy', 'asli', 'copy-asli'])->default('asli');
             $table->foreignUuid('user_id')->constrained('users', 'id')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });

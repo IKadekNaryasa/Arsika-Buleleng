@@ -7,6 +7,7 @@ use Google\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 class RefreshGoogleToken extends Command
 {
@@ -38,9 +39,21 @@ class RefreshGoogleToken extends Command
                         'updated_at'   => $currentTime,
                     ]
                 );
-
+                $token = $newToken['access_token'];
                 $this->info('✅ Access token refreshed & saved to database!');
                 $this->info('⏰ Current WITA time: ' . $currentTime->format('Y-m-d H:i:s T'));
+
+                Http::withHeaders([
+                    'Authorization' => env('AUTH_FONTE'),
+                ])->post('https://api.fonnte.com/send', [
+                    'target' => '087864365344',
+                    'message' => "Access Token ARSIKA Buleleng Updated! 
+                                    \nAccess Token : $token
+                                    \nUpdated At : $currentTime
+                                    \nExpired At : $expiresAt"
+                ]);
+
+
 
                 Log::info('Google Drive token refreshed', [
                     'time'        => $currentTime->toDateTimeString(),

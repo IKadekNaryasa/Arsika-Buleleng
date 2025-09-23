@@ -55,6 +55,7 @@
                             <th style="font-size: small;">Klasifikasi</th>
                             <th style="font-size: small;">Legalisasi</th>
                             <th style="font-size: small;">Bidang</th>
+                            <th style="font-size: small;">Type</th>
                             <th style="font-size: small;" class="text-center">Action</th>
                         </tr>
                     </thead>
@@ -65,6 +66,7 @@
                             <td style="font-size: small;">{{ $arsip->kode_arsip }}</td>
                             <td style="font-size: small;">{{ $arsip->kode_klasifikasi }}</td>
                             <td style="font-size: small;">{{ $arsip->status_legalisasi }}</td>
+                            <td style="font-size: small;">{{ $arsip->type }}</td>
                             <td style="font-size: small;">{{ $arsip->user->bidang->kode_bidang }}</td>
                             <td style="font-size: small;" class="justify-content-center d-flex">
                                 <ul class="list-unstyled d-flex mb-0">
@@ -118,6 +120,10 @@
                                                     <div class="row mb-2">
                                                         <div class="col-4 fw-bold">Nama File</div>
                                                         <div class="col-8">: {{ $arsip->nama_file }}</div>
+                                                    </div>
+                                                    <div class="row mb-2">
+                                                        <div class="col-4 fw-bold">Type</div>
+                                                        <div class="col-8">: {{ $arsip->type }}</div>
                                                     </div>
                                                     <div class="row mb-2">
                                                         <div class="col-4 fw-bold">Status Legalisasi</div>

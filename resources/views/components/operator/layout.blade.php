@@ -117,7 +117,7 @@
                 <ul class="menu-inner py-1">
                     <!-- Dashboard -->
                     <li class="menu-item {{ $active == 'dashboard' ? 'active' : ''  }} ">
-                        <a href="" class="menu-link">
+                        <a href="{{ route('dashboard') }}" class="menu-link">
                             <i class="menu-icon bx bxs-home"></i>
                             <div data-i18n="Analytics">Dashboard</div>
                         </a>
@@ -138,16 +138,7 @@
                                     <div data-i18n="Create Project">Tambah Arsip</div>
                                 </a>
                             </li>
-                            <li class="menu-item {{ $active == 'legalisasi' ? 'active' :'' }} ">
-                                <a href="" class="menu-link">
-                                    <div data-i18n="Create Project">Legalisasi Arsip</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ $active == 'cekLegalitas' ? 'active' :'' }} ">
-                                <a href="" class="menu-link">
-                                    <div data-i18n="Create Project">Cek Legalitas Arsip</div>
-                                </a>
-                            </li>
+
                         </ul>
                     </li>
                 </ul>
@@ -182,7 +173,7 @@
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                                     <div class="avatar avatar-online">
-                                        <img src="{{ asset('favicon.png') }}" alt class="w-px-40 h-auto rounded-circle" />
+                                        <img src="{{ asset('img/arsika.png') }}" alt class="w-px-40 h-auto rounded-circle" />
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
@@ -191,7 +182,7 @@
                                             <div class="d-flex">
                                                 <div class="flex-shrink-0 me-3">
                                                     <div class="avatar avatar-online">
-                                                        <img src="{{ asset('favicon.png') }}" alt class="w-px-40 h-auto rounded-circle" />
+                                                        <img src="{{ asset('img/arsika.png') }}" alt class="w-px-40 h-auto rounded-circle" />
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">

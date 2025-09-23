@@ -19,7 +19,12 @@ class ArsipController extends Controller
      */
     public function index()
     {
-        $arsips = Arsip::with('user.bidang')->latest()->get();
+        $bidangId = Auth::user()->bidang_id;
+
+        $arsips = Arsip::with('user.bidang')->whereHas('user', function ($query) use ($bidangId) {
+            $query->where('bidang_id', $bidangId);
+        })->latest()->get();
+
         $data = [
             'active' => 'dataArsip',
             'open' => 'arsip',
@@ -60,7 +65,7 @@ class ArsipController extends Controller
                 $rules["arsip.{$index}.tanggal_arsip"] = 'required|date';
                 $rules["arsip.{$index}.nama_file"] = 'required|mimes:pdf|max:20240';
                 $rules["arsip.{$index}.uraian"] = 'required|string';
-                $rules["arsip.{$index}.jumlah"] = 'required|numeric|min:1';
+                $rules["arsip.{$index}.type"] = 'required|string';
             }
 
             $request->validate($rules);
@@ -112,7 +117,7 @@ class ArsipController extends Controller
                             'path_file' => $filePath,
                             'status_legalisasi' => 'onProgress',
                             'user_id' => $user_id,
-                            'jumlah' => $data['jumlah']
+                            'type' => $data['type']
                         ]);
 
                         $successCount++;
