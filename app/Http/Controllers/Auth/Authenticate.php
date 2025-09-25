@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -18,43 +19,50 @@ class Authenticate extends Controller
         ];
 
         $credential = Validator::make($sanitize, [
-            'email' => ['required', 'email', 'exists:users,email'],
+            'email' => ['required', 'email'],
             'password' => ['required', 'min:8']
         ])->validate();
 
-        if (Auth::attempt($credential)) {
-            $request->session()->regenerate();
+        try {
+            if (Auth::attempt($credential)) {
+                $request->session()->regenerate();
 
-            $user = Auth::user();
+                $user = Auth::user();
 
-            if (!$user) {
-                Auth::logout();
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Failed Authentication'
-                ], 401);
+                if (!$user) {
+                    Auth::logout();
+                    return redirect()->route('login')->withErrors(['errors' => 'Invalid Credential!']);
+                }
+
+                $role = Auth::user()->role;
+                $route = '';
+
+                switch ($role) {
+                    case 'operator':
+                        $route = 'dashboard';
+                        break;
+                    case 'kepala_badan':
+                        $route = 'kbn.dashboard';
+                        break;
+
+                    default:
+                        Auth::logout();
+                }
+                return redirect()->intended(route($route))->with('success', 'Loggin Success!');
             }
 
             if ($request->expectsJson()) {
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Authentication Success',
-                    'user' => $user
-                ]);
+                return redirect()->route('login')->withErrors(['errors' => 'Invalid Credential!']);
             }
-            return redirect()->intended(route('dashboard'))->with('success', 'Loggin Success!');
-        }
 
-        if ($request->expectsJson()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Invalid Username or Password'
-            ], 401);
+            return back()->withErrors([
+                'errors' => 'The provided credentials do not match our records.',
+            ])->withInput($request->only('email'));
+        } catch (Exception $e) {
+            return back()->withErrors([
+                'errors' => 'The provided credentials do not match our records.',
+            ])->withInput($request->only('email'));
         }
-
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->withInput($request->only('email'));
     }
     public function logout(Request $request)
     {

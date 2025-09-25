@@ -15,7 +15,16 @@ class BidangSeeder extends Seeder
     public function run(): void
     {
         Bidang::create([
-
+            'id' => Str::uuid()->toString(),
+            'kode_bidang' => 'BKBP',
+            'nama_bidang' => 'Badan Kesatuan Bangsa dan Politik Kabupaten Buleleng'
+        ]);
+        Bidang::create([
+            'id' => Str::uuid()->toString(),
+            'kode_bidang' => 'ARSIKA',
+            'nama_bidang' => 'Arsip Digital Kesbangpol Buleleng'
+        ]);
+        Bidang::create([
             'id' => Str::uuid()->toString(),
             'kode_bidang' => 'BID-I',
             'nama_bidang' => 'Bidang Pengembangan Nilai-nilai Kebangsaan'

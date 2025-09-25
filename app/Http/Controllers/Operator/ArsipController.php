@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Helpers\PdfHelper;
+
 
 class ArsipController extends Controller
 {
@@ -52,6 +54,7 @@ class ArsipController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
 
     public function store(Request $request)
     {
@@ -103,10 +106,26 @@ class ArsipController extends Controller
                     $folderPath = "Belum_dilegalisasi";
                     $filePath = $folderPath . '/' . $fileName;
 
-                    $uploaded = Storage::disk('google')->put($filePath, file_get_contents($file));
+                    $tempPath = storage_path("app/temp_" . uniqid() . ".pdf");
+                    $file->move(dirname($tempPath), basename($tempPath));
+
+                    $convertedPath = storage_path("app/converted_" . uniqid() . ".pdf");
+
+                    try {
+                        PdfHelper::convertToPdf14($tempPath, $convertedPath);
+                        Log::info("Ghostscript berhasil convert PDF ");
+                        $finalPath = $convertedPath;
+                    } catch (\Throwable $e) {
+                        Log::warning("Ghostscript gagal convert PDF: " . $e->getMessage());
+                        $finalPath = $tempPath;
+                    }
+
+                    $uploaded = Storage::disk('google')->put($filePath, file_get_contents($finalPath));
+
+                    @unlink($tempPath);
+                    @unlink($convertedPath);
 
                     if ($uploaded) {
-                        // Simpan data ke database
                         Arsip::create([
                             'kode_arsip' => $kodeArsip,
                             'kategori' => $data['kategori_arsip'],
@@ -126,11 +145,6 @@ class ArsipController extends Controller
                     }
                 } catch (\Exception $e) {
                     $failedFiles[] = $data['nama_file'] ?? "File #" . ($index + 1);
-                    // Log error untuk debugging
-                    // Log::error('Error upload arsip index ' . $index, [
-                    //     'message' => $e->getMessage(),
-                    //     'data' => $data
-                    // ]);
                 }
             }
 
@@ -152,6 +166,7 @@ class ArsipController extends Controller
                 ->withInput();
         }
     }
+
 
 
     /**
