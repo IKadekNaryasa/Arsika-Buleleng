@@ -60,7 +60,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($arsips as $arsip)
+                        @foreach($arsips as $arsip)
                         <tr>
                             <td style="font-size: small;">{{ $loop->iteration }}</td>
                             <td style="font-size: small;">{{ $arsip->kode_arsip }}</td>
@@ -165,11 +165,7 @@
                                 </div>
                             </td>
                         </tr>
-                        @empty
-                        <tr>
-                            <td colspan="6" class="text-center">Tidak ada Arsip!</td>
-                        </tr>
-                        @endforelse
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -179,10 +175,9 @@
 
 @push('script')
 <script>
-    $(document).ready(function() {
-        $('#arsipTable').DataTable();
-    });
-
+    let table = new DataTable('#arsipTable');
+</script>
+<script>
     function confirmDelete(button, arsipId, kodeArsip) {
         Swal.fire({
             title: 'Apakah Anda yakin?',

@@ -19,7 +19,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($arsips as $arsip)
+                        @foreach($arsips as $arsip)
                         <tr>
                             <td style="font-size: small;">{{ $loop->iteration }}</td>
                             <td style="font-size: small;">{{ $arsip->kode_arsip }}</td>
@@ -40,78 +40,76 @@
                                         </button>
                                     </li>
                                 </ul>
-                                <div class="modal fade" id="modalDetail-{{ $arsip->kode_arsip }}" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Detail Arsip {{ $arsip->kode_arsip }}</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="container">
-                                                    <div class="row mb-2">
-                                                        <div class="col-4 fw-bold">Kode Arsip</div>
-                                                        <div class="col-8">: {{ $arsip->kode_arsip }}</div>
-                                                    </div>
-                                                    <div class="row mb-2">
-                                                        <div class="col-4 fw-bold">Kategori</div>
-                                                        <div class="col-8">: {{ $arsip->kategori }}</div>
-                                                    </div>
-                                                    <div class="row mb-2">
-                                                        <div class="col-4 fw-bold">Kode Klasifikasi</div>
-                                                        <div class="col-8">: {{ $arsip->kode_klasifikasi }}</div>
-                                                    </div>
-                                                    <div class="row mb-2">
-                                                        <div class="col-4 fw-bold">Tanggal Arsip</div>
-                                                        <div class="col-8">: {{ $arsip->tanggal_arsip }}</div>
-                                                    </div>
-                                                    <div class="row mb-2">
-                                                        <div class="col-4 fw-bold">Nama File</div>
-                                                        <div class="col-8">: {{ $arsip->nama_file }}</div>
-                                                    </div>
-                                                    <div class="row mb-2">
-                                                        <div class="col-4 fw-bold">Type</div>
-                                                        <div class="col-8">: {{ $arsip->type }}</div>
-                                                    </div>
-                                                    <div class="row mb-2">
-                                                        <div class="col-4 fw-bold">Status Legalisasi</div>
-                                                        <div class="col-8">: {{ $arsip->status_legalisasi }}</div>
-                                                    </div>
-                                                    <div class="row mb-2">
-                                                        <div class="col-4 fw-bold">Kode Bidang</div>
-                                                        <div class="col-8">: {{ $arsip->user->bidang->kode_bidang }}</div>
-                                                    </div>
-                                                    <div class="row mb-2">
-                                                        <div class="col-4 fw-bold">Bidang</div>
-                                                        <div class="col-8">: {{ $arsip->user->bidang->nama_bidang }}</div>
-                                                    </div>
-                                                    <div class="row mb-2">
-                                                        <div class="col-4 fw-bold">Uraian</div>
-                                                        <div class="col-8">: {{ $arsip->uraian }}</div>
-                                                    </div>
-                                                    <div class="row mb-2">
-                                                        <div class="col-4 fw-bold">Pratinjau</div>
-                                                        <div class="col-8">:
-                                                            <a href="{{ route('arsip.show', $arsip->id) }}?v={{ $arsip->updated_at->timestamp }}" target="_blank" class="mx-2 text-primary">
-                                                                <i class='bx bxs-show'></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                    <hr>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </td>
                         </tr>
-                        @empty
-                        <tr>
-                            <td colspan="6" class="text-center">Tidak ada Arsip!</td>
-                        </tr>
-                        @endforelse
+                        @endforeach
                     </tbody>
                 </table>
+                @foreach($arsips as $arsip)
+                <div class="modal fade" id="modalDetail-{{ $arsip->kode_arsip }}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Detail Arsip {{ $arsip->kode_arsip }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container">
+                                    <div class="row mb-2">
+                                        <div class="col-4 fw-bold">Kode Arsip</div>
+                                        <div class="col-8">: {{ $arsip->kode_arsip }}</div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col-4 fw-bold">Kategori</div>
+                                        <div class="col-8">: {{ $arsip->kategori }}</div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col-4 fw-bold">Kode Klasifikasi</div>
+                                        <div class="col-8">: {{ $arsip->kode_klasifikasi }}</div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col-4 fw-bold">Tanggal Arsip</div>
+                                        <div class="col-8">: {{ $arsip->tanggal_arsip }}</div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col-4 fw-bold">Nama File</div>
+                                        <div class="col-8">: {{ $arsip->nama_file }}</div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col-4 fw-bold">Type</div>
+                                        <div class="col-8">: {{ $arsip->type }}</div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col-4 fw-bold">Status Legalisasi</div>
+                                        <div class="col-8">: {{ $arsip->status_legalisasi }}</div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col-4 fw-bold">Kode Bidang</div>
+                                        <div class="col-8">: {{ $arsip->user->bidang->kode_bidang }}</div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col-4 fw-bold">Bidang</div>
+                                        <div class="col-8">: {{ $arsip->user->bidang->nama_bidang }}</div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col-4 fw-bold">Uraian</div>
+                                        <div class="col-8">: {{ $arsip->uraian }}</div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col-4 fw-bold">Pratinjau</div>
+                                        <div class="col-8">:
+                                            <a href="{{ route('arsip.show', $arsip->id) }}?v={{ $arsip->updated_at->timestamp }}" target="_blank" class="mx-2 text-primary">
+                                                <i class='bx bxs-show'></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
             </div>
         </div>
     </div>
@@ -119,8 +117,6 @@
 
 @push('script')
 <script>
-    $(document).ready(function() {
-        $('#arsipTable').DataTable();
-    });
+    let table = new DataTable('#arsipTable');
 </script>
 @endpush

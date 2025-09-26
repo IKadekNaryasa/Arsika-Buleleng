@@ -156,14 +156,14 @@ class ArsipController extends Controller
         $credential = $validator->validate();
         $kode_arsip = $credential['kode_arsip'];
 
-        $arsip = Arsip::where('kode_arsip', '=', $kode_arsip)->firstOrFail();
+        $arsip = Arsip::with('user.bidang')->where('kode_arsip', '=', $kode_arsip)->firstOrFail();
         $pdfSource = storage_path('app/temp_' . Str::random(10) . '.pdf');
         file_put_contents($pdfSource, Storage::disk('google')->get($arsip->path_file));
 
         $outputPdf = storage_path('app/legalized_' . Str::random(10) . '.pdf');
         $qrImage   = storage_path('app/temp_qr.png');
 
-        $qrContent = $arsip->kode_arsip . ' | ' . $arsip->kategori . ' | ' . $arsip->tanggal_arsip;
+        $qrContent = $arsip->kode_arsip . ' | ' . $arsip->kategori . ' | ' . $arsip->tanggal_arsip . ' | ' . $arsip->user->bidang->kode_bidang;
         $qrCode = new QrCode($qrContent);
         $qrCode->setSize(100);
 
