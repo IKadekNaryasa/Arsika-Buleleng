@@ -7,6 +7,7 @@ use App\Http\Controllers\Kaban\DashboardController as KabanDashboardController;
 
 
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 Route::get('kbn/dashboard', [KabanDashboardController::class, 'index'])->name('kbn.dashboard');
 
 // Arsip

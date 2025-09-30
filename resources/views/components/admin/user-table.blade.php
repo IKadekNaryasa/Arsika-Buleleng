@@ -12,22 +12,22 @@
                             <th style="font-size: small;">Instansi</th>
                             <th style="font-size: small;">Email</th>
                             <th style="font-size: small;">Role</th>
+                            <th style="font-size: small;">Status</th>
+                            <th style="font-size: small;">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($users as $user)
+                        @foreach($users as $user)
                         <tr>
                             <td style="font-size: small;">{{ $loop->iteration }}</td>
                             <td style="font-size: small;">{{ $user->name }}</td>
                             <td style="font-size: small;">{{ $user->bidang->nama_bidang }}</td>
                             <td style="font-size: small;">{{ $user->email }}</td>
                             <td style="font-size: small;">{{ $user->role }}</td>
+                            <td style="font-size: small;">{{ $user->status }}</td>
+                            <td style="font-size: small;"></td>
                         </tr>
-                        @empty
-                        <tr>
-                            <td colspan="5" class="text-center">Tidak ada User!</td>
-                        </tr>
-                        @endforelse
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -37,8 +37,6 @@
 
 @push('script')
 <script>
-    $(document).ready(function() {
-        $('#userTable').DataTable();
-    });
+    let table = new DataTable('#userTable');
 </script>
 @endpush()

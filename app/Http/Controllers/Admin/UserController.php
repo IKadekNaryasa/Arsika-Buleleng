@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Models\User;
 use App\Models\Bidang;
 use Illuminate\Http\Request;
+use Psy\Exception\Exception;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -16,9 +19,9 @@ class UserController extends Controller
     {
         $users = User::with('bidang')->get();
         $data = [
-            'active' => '',
-            'link' => '',
-            'open' => '',
+            'active' => 'dataUser',
+            'link' => 'User',
+            'open' => 'user',
             'users' => $users
         ];
         return view('admin.user.index', $data);
@@ -31,9 +34,9 @@ class UserController extends Controller
     {
         $bidangs = Bidang::all();
         $data = [
-            'active' => '',
-            'open' => '',
-            'link' => '',
+            'active' => 'createUser',
+            'open' => 'user',
+            'link' => 'Create user',
             'bidangs' => $bidangs,
         ];
         return view('admin.user.create', $data);
@@ -44,7 +47,32 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'bidang' => 'required|exists:bidangs,id',
+            'nama' => 'required|string',
+            'email' => 'required|email',
+            'role' => 'required|in:operator,admin,kepala_badan',
+            'status' => 'required|in:active,nonActive'
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+        $credential = $validator->validate();
+        try {
+            User::create([
+                'bidang_id' => e($credential['bidang']),
+                'name' => e($credential['nama']),
+                'email' => e($credential['email']),
+                'role' => e($credential['role']),
+                'password' => Hash::make('12345678'),
+                'status' => e($credential['status']),
+            ]);
+
+            return redirect()->route('admin.user.index')->with('success', 'User berhasil ditambahkan!');
+        } catch (Exception $e) {
+            return back()->withErrors(['errors' => 'Gagal menambahkan User'])->withInput();
+        }
     }
 
     /**

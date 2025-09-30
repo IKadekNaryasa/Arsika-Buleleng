@@ -18,10 +18,16 @@ class Authenticate extends Controller
             'password' => e($request->input('password'))
         ];
 
-        $credential = Validator::make($sanitize, [
+        $validator = Validator::make($sanitize, [
             'email' => ['required', 'email'],
             'password' => ['required', 'min:8']
         ])->validate();
+
+        $credential = [
+            'email' => $validator['email'],
+            'password' => $validator['password'],
+            'status' => 'active'
+        ];
 
         try {
             if (Auth::attempt($credential)) {
@@ -44,7 +50,9 @@ class Authenticate extends Controller
                     case 'kepala_badan':
                         $route = 'kbn.dashboard';
                         break;
-
+                    case 'admin':
+                        $route = 'admin.user.index';
+                        break;
                     default:
                         Auth::logout();
                 }
