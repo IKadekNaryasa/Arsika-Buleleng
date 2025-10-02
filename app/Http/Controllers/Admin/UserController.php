@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
 use App\Models\Bidang;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Psy\Exception\Exception;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -50,28 +53,39 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'bidang' => 'required|exists:bidangs,id',
             'nama' => 'required|string',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email',
             'role' => 'required|in:operator,admin,kepala_badan',
-            'status' => 'required|in:active,nonActive'
         ]);
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
+
         $credential = $validator->validate();
+
         try {
-            User::create([
+            $verificationToken = Str::random(64);
+
+            $user = User::create([
                 'bidang_id' => e($credential['bidang']),
                 'name' => e($credential['nama']),
                 'email' => e($credential['email']),
                 'role' => e($credential['role']),
                 'password' => Hash::make('12345678'),
-                'status' => e($credential['status']),
+                'status' => 'nonActive',
+                'verification_token' => $verificationToken,
             ]);
 
-            return redirect()->route('admin.user.index')->with('success', 'User berhasil ditambahkan!');
+            Mail::to($user->email)->send(new \App\Mail\UserActivationMail($user));
+
+            return redirect()
+                ->route('admin.user.index')
+                ->with('success', 'User berhasil ditambahkan! Email aktivasi telah dikirim ke ' . $user->email);
         } catch (Exception $e) {
-            return back()->withErrors(['errors' => 'Gagal menambahkan User'])->withInput();
+            Log::error('Error creating user ');
+            return back()
+                ->withErrors(['errors' => 'Gagal menambahkan User '])
+                ->withInput();
         }
     }
 

@@ -16,57 +16,44 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
+        $uuidAdmin = Str::uuid()->toString();
+        Bidang::create([
             'id' => Str::uuid()->toString(),
-            'bidang_id' => '233fc223-2a5e-444b-8302-a55f3d4ab029',
-            'name' => 'Operator Bidang 1',
-            'role' => 'operator',
-            'email' => 'bidang1@gmail.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('12345678')
+            'kode_bidang' => 'BKBP',
+            'nama_bidang' => 'Badan Kesatuan Bangsa dan Politik Kabupaten Buleleng'
         ]);
-        User::create([
-            'id' => Str::uuid()->toString(),
-            'bidang_id' => '5ffcc97d-f265-4196-bb52-4ef936f4cbfd',
-            'name' => 'Operator Bidang II',
-            'role' => 'operator',
-            'email' => 'bidang2@gmail.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('12345678')
+        Bidang::create([
+            'id' => $uuidAdmin,
+            'kode_bidang' => 'ARSIKA Buleleng',
+            'nama_bidang' => 'Arsip Digital Kesbangpol Buleleng'
         ]);
-        User::create([
+        Bidang::create([
             'id' => Str::uuid()->toString(),
-            'bidang_id' => 'd86439be-4c13-4589-8f6a-c171c0e07fd4',
-            'name' => 'Operator Bagian Umum',
-            'role' => 'operator',
-            'email' => 'bagianumum@gmail.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('12345678')
+            'kode_bidang' => 'BID-I',
+            'nama_bidang' => 'Bidang Pengembangan Nilai-nilai Kebangsaan'
         ]);
-        User::create([
+        Bidang::create([
             'id' => Str::uuid()->toString(),
-            'bidang_id' => '9fa0d45a-d220-471b-886f-8238d4334dd7',
-            'name' => 'I Kadek Naryasa, S.Kom',
-            'role' => 'operator',
-            'email' => 'iknproject1125@gmail.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('12345678')
+            'kode_bidang' => 'BID-II',
+            'nama_bidang' => 'Bidang Kewaspadaan Nasional'
         ]);
-        User::create([
+        Bidang::create([
             'id' => Str::uuid()->toString(),
-            'bidang_id' => 'fba44d17-6810-4163-abc1-2ffd9d7510d2',
-            'name' => 'Kepala Badan',
-            'role' => 'kepala_badan',
-            'email' => 'kaban@gmail.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('12345678')
+            'kode_bidang' => 'BID-III',
+            'nama_bidang' => 'Bidang Pengembangan Budaya Politik'
         ]);
+        Bidang::create([
+            'id' => Str::uuid()->toString(),
+            'kode_bidang' => 'UMUM',
+            'nama_bidang' => 'Sekretariat Kesbangpol'
+        ]);
+
         User::create([
             'id' => Str::uuid()->toString(),
-            'bidang_id' => '3e2641ff-7eee-4653-bfc8-d94202f5b070',
+            'bidang_id' => $uuidAdmin,
             'name' => 'Admin Arsika',
             'role' => 'admin',
-            'email' => 'arsika@gmail.com',
+            'email' => 'arsikabuleleng@gmail.com',
             'email_verified_at' => now(),
             'password' => Hash::make('12345678')
         ]);
