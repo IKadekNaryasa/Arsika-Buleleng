@@ -19,7 +19,7 @@ class UserActivationMail extends Mailable
     public function __construct(User $user)
     {
         $this->user = $user;
-        $this->activationLink = route('user.activate', ['token' => $user->verification_token]);
+        $this->activationLink = env('APP_IP_LOCAL') . "user/activate/$user->verification_token";
     }
 
     public function envelope(): Envelope
