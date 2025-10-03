@@ -57,11 +57,11 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">Nama</label>
-                                <input type="text" name="nama" class="form-control" required placeholder="Nama beserta gelar">
+                                <input type="text" name="nama" class="form-control" value="{{ old('nama') }}" required placeholder="Nama beserta gelar">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label class="form-label">Email</label>
-                                <input type="email" name="email" class="form-control" required placeholder="masukan Email aktif">
+                                <input type="email" name="email" class="form-control" value="{{ old('email') }}" required placeholder="masukan Email aktif">
                             </div>
 
                             <div class="col-md-3 mb-3">

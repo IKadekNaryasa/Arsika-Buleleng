@@ -53,7 +53,6 @@
                                 <select name="arsip[0][type]" class="form-control" required>
                                     <option value="asli" selected>Asli</option>
                                     <option value="copy">Copy</option>
-                                    <option value="copy-Asli">Copy, Asli</option>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
@@ -173,7 +172,6 @@
                             <select name="arsip[${index}][type]" class="form-control" required>
                                 <option value="asli" selected>Asli</option>
                                 <option value="copy" >Copy</option>
-                                <option value="copy-Asli" >Copy, Asli</option>
                             </select>
                         </div>                  
                     <div class="col-md-6 mb-3">
