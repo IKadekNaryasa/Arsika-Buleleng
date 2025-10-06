@@ -27,16 +27,31 @@
                             <td style="font-size: small;">{{ $user->status }}</td>
                             <td style="font-size: small;" class="justify-content-center d-flex">
                                 <ul class="list-unstyled d-flex mb-0">
-                                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="left" class="pull-up" title="Pratinjau">
-                                        <a href="" class="mx-2 text-primary">
-                                            <i class='bx bxs-show'></i>
+                                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="left" class="pull-up" title="edit">
+                                        <a href="" class="mx-2 text-warning">
+                                            <i class='bx bxs-edit'></i>
                                         </a>
                                     </li>
-                                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="pull-up" title="Detail">
-                                        <button type="button" class="btn btn-link p-0 mx-2 text-info" data-bs-toggle="modal" data-bs-target="#modalDetail">
-                                            <i class='bx bxs-info-circle'></i>
-                                        </button>
+                                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="pull-up" title="Confirm">
+                                        <form action="{{ route('admin.user.setStatus', $user->id) }}" method="POST" id="formUpdateUser{{ $user->id }}">
+                                            @csrf
+                                            @method('PUT')
+                                            @if ($user->status == 'active')
+                                            <input type="hidden" name="status" value="nonActive">
+                                            <button type="button" class="btn btn-link p-0 mx-2 text-success"
+                                                onclick="confirmNonactive('{{ $user->id }}', '{{ $user->name }}', 'Non Aktifkan')">
+                                                <i class='bx bxs-info-circle'></i>
+                                            </button>
+                                            @elseif($user->status == 'nonActive')
+                                            <input type="hidden" name="status" value="active">
+                                            <button type="button" class="btn btn-link p-0 mx-2 text-danger" name="btnConfirm" value="active"
+                                                onclick="confirmNonactive('{{ $user->id }}', '{{ $user->name }}', 'Aktifkan')">
+                                                <i class='bx bxs-info-circle'></i>
+                                            </button>
+                                            @endif
+                                        </form>
                                     </li>
+
                                 </ul>
                             </td>
                         </tr>
@@ -51,5 +66,23 @@
 @push('script')
 <script>
     let table = new DataTable('#userTable');
+</script>
+<script>
+    function confirmNonactive(id, name, status) {
+        Swal.fire({
+            title: "Konfirmasi",
+            text: `User ${name} akan di ${status}. Lanjutkan?`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya, lanjutkan!",
+            cancelButtonText: "Batal"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(`formUpdateUser${id}`).submit();
+            }
+        });
+    }
 </script>
 @endpush()

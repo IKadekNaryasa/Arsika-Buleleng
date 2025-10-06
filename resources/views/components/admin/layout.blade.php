@@ -354,6 +354,8 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script src="https:////cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
     <!-- <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     @stack('script')
     @if (session('errorFrom') === 'changePassword')

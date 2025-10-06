@@ -120,4 +120,27 @@ class UserController extends Controller
     {
         //
     }
+
+    public function setStatus(Request $request, User $user)
+    {
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|in:active,nonActive'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+
+        $credential = $validator->validate();
+
+        try {
+            $user->update([
+                'status' => $credential['status']
+            ]);
+
+            return redirect()->back()->with('success', "Akun $user->name di Non Aktifkan!");
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['errors' => "Akun $user->name gagal di Non Aktifkan"]);
+        }
+    }
 }
