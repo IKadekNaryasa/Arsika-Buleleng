@@ -1,4 +1,7 @@
 @props(['users'])
+{{-- Loading Overlay --}}
+<x-overlay></x-overlay>
+
 <div class="row">
     <div class="card mb-4">
         <h5 class="card-header text-center">Data User</h5>
@@ -24,11 +27,17 @@
                             <td style="font-size: small;">{{ $user->bidang->nama_bidang }}</td>
                             <td style="font-size: small;">{{ $user->email }}</td>
                             <td style="font-size: small;">{{ $user->role }}</td>
-                            <td style="font-size: small;">{{ $user->status }}</td>
+                            <td style="font-size: small;">
+                                @if ($user->status == 'active')
+                                <span class="badge bg-success">{{ $user->status }}</span>
+                                @elseif($user->status == 'nonActive')
+                                <span class="badge bg-danger">{{ $user->status }}</span>
+                                @endif
+                            </td>
                             <td style="font-size: small;" class="justify-content-center d-flex">
-                                <ul class="list-unstyled d-flex mb-0">
+                                <ul class="list-unstyled d-flex ">
                                     <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="left" class="pull-up" title="edit">
-                                        <a href="" class="mx-2 text-warning">
+                                        <a href="{{ route('admin.user.edit',$user->id) }}" class="mx-2 text-warning">
                                             <i class='bx bxs-edit'></i>
                                         </a>
                                     </li>
@@ -68,6 +77,8 @@
     let table = new DataTable('#userTable');
 </script>
 <script>
+    const formUpdateUser = document.getElementById('formUpdateUser');
+
     function confirmNonactive(id, name, status) {
         Swal.fire({
             title: "Konfirmasi",
@@ -81,6 +92,11 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 document.getElementById(`formUpdateUser${id}`).submit();
+                loadingOverlay.classList.remove('d-none');
+                formUpdateUser.classList.add('form-disabled');
+                submitBtn.disabled = true;
+                submitText.textContent = 'Menyimpan data, mohon tunggu...';
+                submitSpinner.classList.remove('d-none');
             }
         });
     }

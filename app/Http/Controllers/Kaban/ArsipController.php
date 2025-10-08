@@ -154,7 +154,7 @@ class ArsipController extends Controller
             return back()->withErrors($validator)->withInput();
         }
         $credential = $validator->validate();
-        $kode_arsip = $credential['kode_arsip'];
+        $kode_arsip = e($credential['kode_arsip']);
 
         $arsip = Arsip::with('user.bidang')->where('kode_arsip', '=', $kode_arsip)->firstOrFail();
         $pdfSource = storage_path('app/temp_' . Str::random(10) . '.pdf');

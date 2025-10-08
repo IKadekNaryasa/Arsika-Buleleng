@@ -5,6 +5,7 @@ use App\Http\Middleware\ArsikaGuest;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthLogin;
 use App\Http\Controllers\Auth\Authenticate;
+use App\Http\Controllers\Auth\ChangePassword;
 use App\Http\Controllers\VerificationController;
 
 Route::middleware(ArsikaGuest::class)->group(function () {
@@ -29,4 +30,6 @@ Route::middleware(ArsikaGuest::class)->group(function () {
 
 Route::middleware(ArsikaAuth::class)->group(function () {
     Route::get('logout', [Authenticate::class, 'logout'])->name('auth.logout');
+
+    Route::put('auth/update/{user}', [ChangePassword::class, 'changePassword'])->name('changePassword');
 });

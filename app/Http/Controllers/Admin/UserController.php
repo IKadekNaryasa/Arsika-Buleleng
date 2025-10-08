@@ -7,6 +7,8 @@ use App\Models\Bidang;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Psy\Exception\Exception;
+use App\Mail\UserActivationMail;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -76,7 +78,7 @@ class UserController extends Controller
                 'verification_token' => $verificationToken,
             ]);
 
-            Mail::to($user->email)->send(new \App\Mail\UserActivationMail($user));
+            Mail::to($user->email)->send(new UserActivationMail($user));
 
             return redirect()
                 ->route('admin.user.index')
@@ -102,7 +104,15 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        $userWithBidang = User::with('bidang')->where('id', '=', $user->id)->firstOrFail();
+        $data = [
+            'user' => $userWithBidang,
+            'bidangs' => Bidang::all(),
+            'active' => 'user',
+            'open' => 'user',
+            'link' => 'Edit user',
+        ];
+        return view('admin.user.edit', $data);
     }
 
     /**
@@ -110,7 +120,50 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'bidang' => 'required|exists:bidangs,id',
+            'nama' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'role' => 'required|in:operator,admin,kepala_badan',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $credential = $validator->validated();
+
+        try {
+            DB::transaction(function () use ($credential, $user) {
+                if ($user->email !== $credential['email']) {
+                    $verificationToken = Str::random(64);
+
+                    $user->update([
+                        'bidang_id' => e($credential['bidang']),
+                        'name' => e($credential['nama']),
+                        'email' => e($credential['email']),
+                        'role' => e($credential['role']),
+                        'status' => 'nonActive',
+                        'verification_token' => $verificationToken,
+                    ]);
+                } else {
+                    $user->update([
+                        'bidang_id' => $credential['bidang'],
+                        'name' => $credential['nama'],
+                        'email' => $credential['email'],
+                        'role' => $credential['role'],
+                    ]);
+                }
+            });
+
+            if ($user->wasChanged('email')) {
+                Mail::to($user->email)->send(new UserActivationMail($user));
+            }
+
+            return redirect()->route('admin.user.index')->with('success', 'Data user berhasil diperbarui!');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Data User gagal diperbarui'])->withInput();
+        }
     }
 
     /**
@@ -135,12 +188,22 @@ class UserController extends Controller
 
         try {
             $user->update([
-                'status' => $credential['status']
+                'status' => e($credential['status'])
             ]);
+            if ($credential['status'] == 'active') {
+                $pesan = 'Aktifkan';
+            } else {
+                $pesan = 'Non Aktifkan';
+            }
 
-            return redirect()->back()->with('success', "Akun $user->name di Non Aktifkan!");
+            return redirect()->back()->with('success', "Akun $user->name di $pesan!");
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(['errors' => "Akun $user->name gagal di Non Aktifkan"]);
+            if ($credential['status'] == 'active') {
+                $pesan = 'Aktifkan';
+            } else {
+                $pesan = 'Non Aktifkan';
+            }
+            return redirect()->back()->withErrors(['errors' => "Akun $user->name gagal di $pesan"]);
         }
     }
 }

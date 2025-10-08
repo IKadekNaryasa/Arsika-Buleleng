@@ -49,6 +49,7 @@
 </head>
 
 <body>
+
     @if (session('success'))
     <div
         id="toast"
@@ -207,6 +208,12 @@
                                         <div class="dropdown-divider"></div>
                                     </li>
                                     <li>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="bx bx-cog me-2"></i>
+                                            <span class="align-middle" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Change Password</span>
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a class="dropdown-item" href="{{ route('auth.logout') }}">
                                             <i class="bx bx-power-off me-2"></i>
                                             <span class="align-middle">Log Out</span>
@@ -270,7 +277,7 @@
                         data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
-                <form action="" method="post">
+                <form action="{{ route('changePassword',auth()->user()->id) }}" method="post" id="changePasswordForm">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
@@ -370,6 +377,24 @@
             if (toastEl) {
                 var toast = new bootstrap.Toast(toastEl);
                 toast.show();
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("changePasswordForm");
+
+            if (form) {
+                form.addEventListener("submit", function() {
+                    const submitButton = form.querySelector('button[type="submit"]');
+                    if (submitButton) {
+                        submitButton.disabled = true;
+                        submitButton.innerHTML = `
+                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    Menyimpan data...
+                `;
+                    }
+                });
             }
         });
     </script>

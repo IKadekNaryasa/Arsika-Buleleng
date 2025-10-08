@@ -3,11 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LegalController;
 use App\Http\Controllers\Operator\DashboardController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Kaban\DashboardController as KabanDashboardController;
 
 
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::get('admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+Route::get('admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 Route::get('kbn/dashboard', [KabanDashboardController::class, 'index'])->name('kbn.dashboard');
 
 // Arsip

@@ -65,7 +65,13 @@
                             <td style="font-size: small;">{{ $loop->iteration }}</td>
                             <td style="font-size: small;">{{ $arsip->kode_arsip }}</td>
                             <td style="font-size: small;">{{ $arsip->kode_klasifikasi }}</td>
-                            <td style="font-size: small;">{{ $arsip->status_legalisasi }}</td>
+                            <td style="font-size: small;">
+                                @if ($arsip->status_legalisasi == 'onProgress')
+                                <span class="badge bg-warning">{{ $arsip->status_legalisasi }}</span>
+                                @elseif($arsip->status_legalisasi == 'legal')
+                                <span class="badge bg-success">{{ $arsip->status_legalisasi }}</span>
+                                @endif
+                            </td>
                             <td style="font-size: small;">{{ $arsip->type }}</td>
                             <td style="font-size: small;">{{ $arsip->user->bidang->kode_bidang }}</td>
                             <td style="font-size: small;" class="justify-content-center d-flex">

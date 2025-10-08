@@ -128,15 +128,15 @@ class ArsipController extends Controller
                     if ($uploaded) {
                         Arsip::create([
                             'kode_arsip' => $kodeArsip,
-                            'kategori' => $data['kategori_arsip'],
-                            'kode_klasifikasi' => $data['kode_klasifikasi'],
-                            'tanggal_arsip' => $data['tanggal_arsip'],
+                            'kategori' => e($data['kategori_arsip']),
+                            'kode_klasifikasi' => e($data['kode_klasifikasi']),
+                            'tanggal_arsip' => e($data['tanggal_arsip']),
                             'nama_file' => $originalFileName,
-                            'uraian' => $data['uraian'],
+                            'uraian' => e($data['uraian']),
                             'path_file' => $filePath,
                             'status_legalisasi' => 'onProgress',
                             'user_id' => $user_id,
-                            'type' => $data['type']
+                            'type' => e($data['type'])
                         ]);
 
                         $successCount++;

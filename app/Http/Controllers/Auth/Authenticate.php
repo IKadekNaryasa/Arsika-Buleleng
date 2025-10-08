@@ -51,7 +51,7 @@ class Authenticate extends Controller
                         $route = 'kbn.dashboard';
                         break;
                     case 'admin':
-                        $route = 'admin.user.index';
+                        $route = 'admin.dashboard';
                         break;
                     default:
                         Auth::logout();
