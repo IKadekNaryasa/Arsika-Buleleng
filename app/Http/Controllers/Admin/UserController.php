@@ -66,23 +66,24 @@ class UserController extends Controller
         $credential = $validator->validate();
 
         try {
-            $verificationToken = Str::random(64);
+            DB::transaction(function () use ($credential) {
+                $verificationToken = Str::random(64);
 
-            $user = User::create([
-                'bidang_id' => e($credential['bidang']),
-                'name' => e($credential['nama']),
-                'email' => e($credential['email']),
-                'role' => e($credential['role']),
-                'password' => Hash::make('12345678'),
-                'status' => 'nonActive',
-                'verification_token' => $verificationToken,
-            ]);
-
-            Mail::to($user->email)->send(new UserActivationMail($user));
+                $user = User::create([
+                    'bidang_id' => e($credential['bidang']),
+                    'name' => e($credential['nama']),
+                    'email' => e($credential['email']),
+                    'role' => e($credential['role']),
+                    'password' => Hash::make('12345678'),
+                    'status' => 'nonActive',
+                    'verification_token' => $verificationToken,
+                ]);
+                Mail::to($user->email)->send(new UserActivationMail($user));
+            });
 
             return redirect()
                 ->route('admin.user.index')
-                ->with('success', 'User berhasil ditambahkan! Email aktivasi telah dikirim ke ' . $user->email);
+                ->with('success', 'User berhasil ditambahkan! Email aktivasi telah dikirim ke ' . $credential['email']);
         } catch (Exception $e) {
             Log::error('Error creating user ');
             return back()

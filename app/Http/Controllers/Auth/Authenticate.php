@@ -55,6 +55,7 @@ class Authenticate extends Controller
                         break;
                     default:
                         Auth::logout();
+                        return redirect()->route('login')->withErrors(['errors' => 'Invalid Credential!']);
                 }
                 return redirect()->intended(route($route))->with('success', 'Loggin Success!');
             }

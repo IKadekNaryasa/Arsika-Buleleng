@@ -144,6 +144,25 @@
 
                         </ul>
                     </li>
+                    <li class="menu-item {{ ($open == 'bidang') ? 'open active' : '' }} ">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon bx bxs-business"></i>
+                            <div data-i18n="Account Settings">Bidang</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item {{ $active == 'dataBidang' ? 'active' :'' }} ">
+                                <a href="{{ route('admin.bidang.index') }}" class="menu-link">
+                                    <div data-i18n="Project Data">Data Bidang</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ $active == 'createBidang' ? 'active' :'' }} ">
+                                <a href="{{ route('admin.bidang.create') }}" class="menu-link">
+                                    <div data-i18n="Create Project">Create Bidang</div>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
                 </ul>
             </aside>
             <!-- / Menu -->
