@@ -1,4 +1,3 @@
-@props(['active' => '', 'open' => '','link' => ''])
 <!DOCTYPE html>
 <!-- beautify ignore:start -->
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="{{ asset('ikn_sneat') }}/assets/" data-template="vertical-menu-template-free">
@@ -46,7 +45,7 @@
 </head>
 
 <body>
-
+    <x-overlay2></x-overlay2>
     @if (session('success'))
     <div
         id="toast"
@@ -104,7 +103,7 @@
                                 <div class="app-brand justify-content-center">
                                     <img src="{{ asset('img/arsika.png') }}" alt class="w-px-150 h-auto" />
                                 </div>
-                                <form id="formAuthentication" class="mb-3" action="{{ route('auth.authentication') }}" method="POST">
+                                <form id="forgotPasswordForm" class="mb-3" action="{{ route('auth.forgotPassword') }}" method="POST">
                                     @csrf
                                     <div class="mb-3">
                                         <label for="email" class="form-label">Email</label>
@@ -113,31 +112,12 @@
                                             class="form-control"
                                             id="email"
                                             name="email"
-                                            value="<?= old('email'); ?>"
+                                            value="{{ old('email')}} "
                                             placeholder="Enter your email"
                                             autofocus />
                                     </div>
-                                    <div class="mb-3 form-password-toggle">
-                                        <div class="d-flex justify-content-between">
-                                            <label class="form-label" for="password">Password</label>
-                                        </div>
-                                        <div class="input-group input-group-merge">
-                                            <input
-                                                type="password"
-                                                id="password"
-                                                class="form-control"
-                                                name="password"
-                                                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                                aria-describedby="password" required />
-                                            <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
-                                        </div>
-                                        <a href="{{ route('forgot-password') }}">
-                                            <small>Forgot Password?</small>
-                                        </a>
-                                    </div>
-
                                     <div class="mb-3">
-                                        <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
+                                        <button class="btn btn-primary d-grid w-100" type="submit">Send Reset Link</button>
                                     </div>
                                 </form>
 
@@ -191,6 +171,17 @@
                 var toast = new bootstrap.Toast(toastEl);
                 toast.show();
             }
+        });
+    </script>
+    <script>
+        const bidangForm = document.getElementById('forgotPasswordForm');
+
+        bidangForm.addEventListener('submit', function(e) {
+            loadingOverlay.classList.remove('d-none');
+            bidangForm.classList.add('form-disabled');
+            submitBtn.disabled = true;
+            submitText.textContent = 'Mengirim link reset password, mohon tunggu...';
+            submitSpinner.classList.remove('d-none');
         });
     </script>
 </body>

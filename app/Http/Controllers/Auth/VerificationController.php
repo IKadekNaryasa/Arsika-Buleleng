@@ -11,17 +11,6 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 class VerificationController extends Controller
 {
-    public function resend(Request $request)
-    {
-        $user = Auth::user();
-        if ($user->hasVerifiedEmail()) {
-            return redirect()->route('login');
-        }
-
-        Mail::to($user->email)->send(new VerifyEmail($user));
-
-        return back()->with('success', 'Tautan verifikasi telah dikirim ulang!');
-    }
 
     public function verify(EmailVerificationRequest $request)
     {

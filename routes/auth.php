@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthLogin;
 use App\Http\Controllers\Auth\Authenticate;
 use App\Http\Controllers\Auth\ChangePassword;
+use App\Http\Controllers\Auth\ForgotPassword;
 use App\Http\Controllers\VerificationController;
 
 Route::middleware(ArsikaGuest::class)->group(function () {
@@ -17,11 +18,10 @@ Route::middleware(ArsikaGuest::class)->group(function () {
         ->middleware('signed')
         ->name('verification.verify');
 
-    Route::post('/email/verification-notification', [VerificationController::class, 'resend'])
-        ->middleware('throttle:6,1')
-        ->name('verification.send');
-
-
+    Route::get('/forgot-password', [ForgotPassword::class, 'index'])->name('forgot-password');
+    Route::post('auth/forgotPassword', [ForgotPassword::class, 'forgotPassword'])->name('auth.forgotPassword');
+    Route::get('auth/reset-password/{token}', [ForgotPassword::class, 'resetPassword'])->name('password.reset');
+    Route::post('auth/resetPassword', [ForgotPassword::class, 'reset'])->name('password.update');
 
     Route::get('login', [AuthLogin::class, 'index'])->name('login');
     Route::get('/', [AuthLogin::class, 'index'])->name('login');
