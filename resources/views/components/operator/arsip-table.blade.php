@@ -1,50 +1,16 @@
 @props(['arsips'])
 
 {{-- CSS untuk Loading Overlay --}}
-<style>
-    .delete-loading-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background-color: rgba(0, 0, 0, 0.8);
-        z-index: 999999;
-        display: none;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .delete-loading-content {
-        text-align: center;
-        background-color: white;
-        padding: 40px;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        min-width: 300px;
-    }
-
-    .delete-button-loading {
-        pointer-events: none;
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
-</style>
-
-{{-- Loading Overlay untuk Delete --}}
-<div id="deleteLoadingOverlay" class="delete-loading-overlay">
-    <div class="delete-loading-content">
-        <div class="spinner-border text-danger mb-3" role="status" style="width: 3rem; height: 3rem;">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-        <h5 class="text-danger">Menghapus Arsip...</h5>
-        <p class="text-muted">Mohon tunggu, sedang menghapus data dan file!</p>
-    </div>
-</div>
+<x-overlay-delete></x-overlay-delete>
 
 <div class="row">
     <div class="card mb-4">
         <h5 class="card-header text-center">Data Arsip</h5>
+        <div class="row justify-content-end">
+            <div class="col-md-1">
+                <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#modalCetak"><i class="bx bxs-printer"></i></button>
+            </div>
+        </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table-striped" id="arsipTable">
@@ -175,6 +141,40 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal change password -->
+<div class="modal fade" id="modalCetak" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Pilih Tahun Arsip</h5>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <form action="" method="post" id="cetakLaporanForm">
+                @csrf
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 mb-3 ">
+                            <div class="d-flex justify-content-between">
+                                <label class="form-label" for="oldPassword">Tahun</label>
+                            </div>
+                            <select name="tahun" id="tahun" class="form-control">
+                                <option value="2025">2025</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Cetak</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

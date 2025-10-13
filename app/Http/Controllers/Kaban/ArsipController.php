@@ -22,7 +22,7 @@ class ArsipController extends Controller
      */
     public function index()
     {
-        $arsips = Arsip::with('user.bidang')->latest()->get();
+        $arsips = Arsip::with('user.bidang')->get();
         $data = [
             'active' => 'dataArsip',
             'open' => 'arsip',
