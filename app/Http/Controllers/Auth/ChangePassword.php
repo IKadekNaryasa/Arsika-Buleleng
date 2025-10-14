@@ -19,14 +19,15 @@ class ChangePassword extends Controller
             'oldPassword' => 'required|string|min:8',
             'newPassword' => 'required|string|min:8',
             'confirmNewPassword' => 'required|string|same:newPassword|min:8'
-        ]);
+        ])->validate();
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator->errors());
-        }
 
-        $credential = $validator->validate();
-        $newPassword = e($credential['newPassword']);
+        $credential = [
+            'oldPassword' => e($validator['oldPassword']),
+            'newPassword' => e($validator['newPassword']),
+            'confirmNewPassword' => e($validator['confirmNewPassword']),
+        ];
+        $newPassword = $credential['newPassword'];
         try {
             if (!Hash::check($credential['oldPassword'], $user->password)) {
                 return redirect()->back()->withErrors(['errors' => 'Password lama tidak sesuai!']);

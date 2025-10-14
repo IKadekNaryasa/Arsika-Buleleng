@@ -59,13 +59,28 @@ class UserController extends Controller
             'role' => 'required|in:operator,admin,legalizer,sekban',
             'jabatan' => 'required|string',
             'nip' => 'required|string|unique:users,nip'
+        ], [
+            'bidang.required' => 'The field is required',
+            'bidang.exists' => 'The selected field is invalid',
+            'nama.required' => 'The name is required',
+            'nama.string' => 'The name must be a string',
+            'email.required' => 'The email is required',
+            'email.email' => 'The email must be a valid email address',
+            'email.unique' => 'The email has already been taken',
+            'role.required' => 'The role is required',
+            'role.in' => 'The selected role is invalid',
+            'jabatan.required' => 'The position is required',
+            'jabatan.string' => 'The position must be a string',
+            'nip.required' => 'The NIP is required',
+            'nip.string' => 'The NIP must be a string',
+            'nip.unique' => 'The NIP has already been taken',
         ]);
 
         if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
+            return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        $credential = $validator->validate();
+        $credential = $validator->validated();
 
         try {
             DB::transaction(function () use ($credential) {
@@ -132,10 +147,25 @@ class UserController extends Controller
             'nip' => 'required|unique:users,nip,' . $user->id,
             'jabatan' => 'required|string',
             'role' => 'required|in:operator,admin,legalizer,sekban',
+        ], [
+            'bidang.required' => 'The field is required',
+            'bidang.exists' => 'The selected field is invalid',
+            'nama.required' => 'The name is required',
+            'nama.string' => 'The name must be a string',
+            'nama.max' => 'The name must not exceed 255 characters',
+            'email.required' => 'The email is required',
+            'email.email' => 'The email must be a valid email address',
+            'email.unique' => 'The email has already been taken',
+            'nip.required' => 'The employee ID is required',
+            'nip.unique' => 'The employee ID has already been taken',
+            'jabatan.required' => 'The position is required',
+            'jabatan.string' => 'The position must be a string',
+            'role.required' => 'The role is required',
+            'role.in' => 'The selected role is invalid',
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator->errors())->withInput();
+            return redirect()->back()->withInput()->withErrors($validator);
         }
 
         $credential = $validator->validated();
@@ -189,14 +219,16 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'status' => 'required|in:active,nonActive'
+        ], [
+            'status.required' => 'The status is required',
+            'status.in' => 'The selected status is invalid',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator);
         }
 
-        $credential = $validator->validate();
-
+        $credential = $validator->validated();
         try {
             $user->update([
                 'status' => e($credential['status'])

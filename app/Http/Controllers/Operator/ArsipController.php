@@ -287,13 +287,20 @@ class ArsipController extends Controller
             'tahun' => 'required|numeric',
             'sekban' => 'required|string',
             'legalizer' => 'required'
+        ], [
+            'tahun.required' => 'The year is required',
+            'tahun.numeric' => 'The year must be a number',
+            'sekban.required' => 'The sekban is required',
+            'sekban.string' => 'The sekban must be a string',
+            'legalizer.required' => 'The legalizer is required',
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator->errors());
+            return redirect()->back()->withErrors($validator);
         }
 
-        $credential = $validator->validate();
+        $credential = $validator->validated();
+
         $tahun = $credential['tahun'];
         $sekban = $credential['sekban'];
         $legalizerId = $credential['legalizer'];

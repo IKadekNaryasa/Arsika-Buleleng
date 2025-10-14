@@ -157,11 +157,16 @@ class ArsipController extends Controller
 
         $validator = Validator::make($sanitize, [
             'kode_arsip' => 'required|exists:arsips,kode_arsip'
+        ], [
+            'kode_arsip.required' => 'The archive code is required',
+            'kode_arsip.exists' => 'The archive code does not exist',
         ]);
+
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-        $credential = $validator->validate();
+
+        $credential = $validator->validated();
         $kode_arsip = e($credential['kode_arsip']);
 
         $arsip = Arsip::with('user.bidang')->where('kode_arsip', '=', $kode_arsip)->firstOrFail();

@@ -46,24 +46,24 @@ class BidangController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $credential = $request->validate([
             'nama_bidang' => 'required|string',
             'kode_bidang' => 'required|string'
+        ], [
+            'nama_bidang.required' => 'The field name is required',
+            'nama_bidang.string' => 'The field name must be a string',
+            'kode_bidang.required' => 'The field code is required',
+            'kode_bidang.string' => 'The field code must be a string',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withInput()->withErrors($validator->errors());
-        }
-
-        $credential = $validator->validate();
         try {
             Bidang::create([
                 'nama_bidang' => ucwords(strtolower(e($credential['nama_bidang']))),
                 'kode_bidang' => ucwords(strtoupper(e($credential['kode_bidang']))),
             ]);
+
             return redirect()->route('admin.bidang.index')->with('success', 'Success, New bidang created!');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(['errors' => 'Failed to add new bidang']);
+            return redirect()->back()->withErrors(['errors' => 'Failed to add new bidang'])->withInput();
         }
     }
 
@@ -106,13 +106,20 @@ class BidangController extends Controller
                 'string',
                 Rule::unique('bidangs', 'kode_bidang')->ignore($bidang->id),
             ],
+        ], [
+            'nama_bidang.required' => 'The field name is required',
+            'nama_bidang.string' => 'The field name must be a string',
+            'nama_bidang.unique' => 'The field name has already been taken',
+            'kode_bidang.required' => 'The field code is required',
+            'kode_bidang.string' => 'The field code must be a string',
+            'kode_bidang.unique' => 'The field code has already been taken',
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->withInput()->withErrors($validator->errors());
+            return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        $credential = $validator->validate();
+        $credential = $validator->validated();
 
         try {
             $bidang->update([
