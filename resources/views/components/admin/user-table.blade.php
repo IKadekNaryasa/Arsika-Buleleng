@@ -28,7 +28,17 @@
                             <td style="font-size: small;">{{ $user->bidang->nama_bidang }}</td>
                             <td style="font-size: small;">{{ $user->jabatan }}</td>
                             <!-- <td style="font-size: small;">{{ $user->email }}</td> -->
-                            <td style="font-size: small;">{{ $user->role }}</td>
+                            <td style="font-size: small;">
+                                @if ($user->role == 'admin')
+                                <span class="badge bg-primary">{{ $user->role  }}</span>
+                                @elseif($user->role == 'operator')
+                                <span class="badge bg-info">{{ $user->role  }}</span>
+                                @elseif($user->role == 'legalizer')
+                                <span class="badge bg-warning">{{ $user->role  }}</span>
+                                @elseif($user->role == 'sekban')
+                                <span class="badge bg-success">Sekretaris Badan</span>
+                                @endif
+                            </td>
                             <td style="font-size: small;">
                                 @if ($user->status == 'active')
                                 <span class="badge bg-success">{{ $user->status }}</span>

@@ -129,13 +129,13 @@ class UserController extends Controller
             'bidang' => 'required|exists:bidangs,id',
             'nama' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'nip' => 'required|email|unique:users,nip,' . $user->id,
+            'nip' => 'required|unique:users,nip,' . $user->id,
             'jabatan' => 'required|string',
             'role' => 'required|in:operator,admin,legalizer,sekban',
         ]);
 
         if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
+            return redirect()->back()->withErrors($validator->errors())->withInput();
         }
 
         $credential = $validator->validated();

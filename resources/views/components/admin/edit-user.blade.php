@@ -36,7 +36,8 @@
                                     <option value="{{$user->role}}" selected>{{$user->role}}</option>
                                     <option value="operator">Operator</option>
                                     <option value="admin">Admin</option>
-                                    <option value="kepala_badan">Kepala Badan</option>
+                                    <option value="legalizer">Legalizer</option>
+                                    <option value="sekban">Sekretaris Badan</option>
                                 </select>
                             </div>
                             <div class="col-md-5 mb-3">
