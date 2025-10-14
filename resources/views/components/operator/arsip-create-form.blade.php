@@ -36,7 +36,7 @@
                             <div class="col-md-3 mb-3">
                                 <label class="form-label">Kode Klasifikasi</label>
                                 <input type="text" name="arsip[0][kode_klasifikasi]" class="form-control" required
-                                    placeholder="Masukan Kode Klasifikasi">
+                                    placeholder="Masukan Kode Klasifikasi" value="{{ old('arsip[0][kode_klasifikasi]') }}">
                             </div>
                             <div class="col-md-2 mb-3">
                                 <label class="form-label">Tanggal Arsip</label>
@@ -61,7 +61,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Uraian</label>
-                                <input type="text" name="arsip[0][uraian]" class="form-control" required>
+                                <input type="text" name="arsip[0][uraian]" class="form-control" required value="{{ old('arsip[0][uraian]') }}">
                             </div>
                         </div>
                     </div>
