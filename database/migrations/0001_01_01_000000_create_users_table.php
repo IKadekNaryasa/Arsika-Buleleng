@@ -15,10 +15,12 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('bidang_id')->constrained('bidangs', 'id')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('name');
-            $table->enum('role', ['operator', 'kepala_badan', 'admin'])->default('operator');
+            $table->enum('role', ['operator', 'legalizer', 'admin', 'sekban'])->default('operator');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('jabatan');
+            $table->string('nip')->unique();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -10,10 +10,11 @@
                 <table class="table-striped" id="userTable">
                     <thead>
                         <tr>
-                            <th style="font-size: small;">No</th>
                             <th style="font-size: small;">Nama</th>
+                            <!-- <th style="font-size: small;">NIP</th> -->
                             <th style="font-size: small;">Instansi/Bidang</th>
-                            <th style="font-size: small;">Email</th>
+                            <th style="font-size: small;">Jabatan</th>
+                            <!-- <th style="font-size: small;">Email</th> -->
                             <th style="font-size: small;">Role</th>
                             <th style="font-size: small;">Status</th>
                             <th style="font-size: small;">Action</th>
@@ -22,10 +23,11 @@
                     <tbody>
                         @foreach($users as $user)
                         <tr>
-                            <td style="font-size: small;">{{ $loop->iteration }}</td>
                             <td style="font-size: small;">{{ $user->name }}</td>
+                            <!-- <td style="font-size: small;">{{ $user->nip }}</td> -->
                             <td style="font-size: small;">{{ $user->bidang->nama_bidang }}</td>
-                            <td style="font-size: small;">{{ $user->email }}</td>
+                            <td style="font-size: small;">{{ $user->jabatan }}</td>
+                            <!-- <td style="font-size: small;">{{ $user->email }}</td> -->
                             <td style="font-size: small;">{{ $user->role }}</td>
                             <td style="font-size: small;">
                                 @if ($user->status == 'active')
@@ -34,34 +36,34 @@
                                 <span class="badge bg-danger">{{ $user->status }}</span>
                                 @endif
                             </td>
-                            <td style="font-size: small;" class="justify-content-center d-flex">
-                                <ul class="list-unstyled d-flex ">
-                                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="left" class="pull-up" title="edit">
-                                        <a href="{{ route('admin.user.edit',$user->id) }}" class="mx-2 text-warning">
-                                            <i class='bx bxs-edit'></i>
-                                        </a>
-                                    </li>
-                                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="pull-up" title="Confirm">
-                                        <form action="{{ route('admin.user.setStatus', $user->id) }}" method="POST" id="formUpdateUser{{ $user->id }}">
-                                            @csrf
-                                            @method('PUT')
-                                            @if ($user->status == 'active')
-                                            <input type="hidden" name="status" value="nonActive">
-                                            <button type="button" class="btn btn-link p-0 mx-2 text-success"
-                                                onclick="confirmNonactive('{{ $user->id }}', '{{ $user->name }}', 'Non Aktifkan')">
-                                                <i class='bx bxs-info-circle'></i>
-                                            </button>
-                                            @elseif($user->status == 'nonActive')
-                                            <input type="hidden" name="status" value="active">
-                                            <button type="button" class="btn btn-link p-0 mx-2 text-danger" name="btnConfirm" value="active"
-                                                onclick="confirmNonactive('{{ $user->id }}', '{{ $user->name }}', 'Aktifkan')">
-                                                <i class='bx bxs-info-circle'></i>
-                                            </button>
-                                            @endif
-                                        </form>
-                                    </li>
+                            <td style="font-size: small;" class="text-center">
+                                <div class="d-inline-flex gap-2">
+                                    <a href="{{ route('admin.user.edit',$user->id) }}" class="text-warning"
+                                        data-bs-toggle="tooltip" data-bs-placement="left" title="edit">
+                                        <i class='bx bxs-edit'></i>
+                                    </a>
 
-                                </ul>
+                                    <form action="{{ route('admin.user.setStatus', $user->id) }}" method="POST"
+                                        id="formUpdateUser{{ $user->id }}" class="d-inline">
+                                        @csrf
+                                        @method('PUT')
+                                        @if ($user->status == 'active')
+                                        <input type="hidden" name="status" value="nonActive">
+                                        <button type="button" class="btn btn-link p-0 text-success"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Confirm"
+                                            onclick="confirmNonactive('{{ $user->id }}', '{{ $user->name }}', 'Non Aktifkan')">
+                                            <i class='bx bxs-info-circle'></i>
+                                        </button>
+                                        @else
+                                        <input type="hidden" name="status" value="active">
+                                        <button type="button" class="btn btn-link p-0 text-danger"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Confirm"
+                                            onclick="confirmNonactive('{{ $user->id }}', '{{ $user->name }}', 'Aktifkan')">
+                                            <i class='bx bxs-info-circle'></i>
+                                        </button>
+                                        @endif
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         @endforeach

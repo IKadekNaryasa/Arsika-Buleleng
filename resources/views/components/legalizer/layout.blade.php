@@ -119,7 +119,7 @@
                 <ul class="menu-inner py-1">
                     <!-- Dashboard -->
                     <li class="menu-item {{ $active == 'dashboard' ? 'active' : ''  }} ">
-                        <a href="{{ route('kbn.dashboard') }}" class="menu-link">
+                        <a href="{{ route('legalizer.dashboard') }}" class="menu-link">
                             <i class="menu-icon bx bxs-home"></i>
                             <div data-i18n="Analytics">Dashboard</div>
                         </a>
@@ -131,12 +131,12 @@
                         </a>
                         <ul class="menu-sub">
                             <li class="menu-item {{ $active == 'dataArsip' ? 'active' :'' }} ">
-                                <a href="{{ route('kbn.arsip.index') }}" class="menu-link">
+                                <a href="{{ route('legalizer.arsip.index') }}" class="menu-link">
                                     <div data-i18n="Project Data">Data Arsip</div>
                                 </a>
                             </li>
                             <li class="menu-item {{ $active == 'dataArsipBelumLegal' ? 'active' :'' }} ">
-                                <a href="{{ route('kbn.arsip.belumLegal') }}" class="menu-link">
+                                <a href="{{ route('legalizer.arsip.belumLegal') }}" class="menu-link">
                                     <div data-i18n="Create Project">Belum Legalisasi</div>
                                 </a>
                             </li>

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class ArsikaKaban
+class ArsikaLegalizer
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,7 @@ class ArsikaKaban
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::user()->role !== 'kepala_badan') {
+        if (Auth::user()->role !== 'legalizer') {
             return redirect()->back()->withErrors(['error' => 'Access Denied!']);
         }
         return $next($request);

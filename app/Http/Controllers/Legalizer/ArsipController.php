@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Kaban;
+namespace App\Http\Controllers\Legalizer;
 
 use App\Models\Arsip;
 use setasign\Fpdi\Fpdi;
@@ -11,6 +11,7 @@ use Psy\Exception\Exception;
 
 use App\Http\Controllers\Controller;
 use Endroid\QrCode\Writer\PngWriter;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -22,26 +23,33 @@ class ArsipController extends Controller
      */
     public function index()
     {
-        $arsips = Arsip::with('user.bidang')->get();
+        $bidangId = Auth::user()->bidang_id;
+        $arsips = Arsip::with('user.bidang')->whereHas('user', function ($query) use ($bidangId) {
+            $query->where('bidang_id', $bidangId);
+        })->latest()->get();
         $data = [
             'active' => 'dataArsip',
             'open' => 'arsip',
             'link' => 'Arsip | Data Arsip',
             'arsips' => $arsips
         ];
-        return view('kaban.arsip.index', $data);
+        return view('legalizer.arsip.index', $data);
     }
 
     public function arsipBelumLegal()
     {
-        $arsips = Arsip::with('user.bidang')->where('status_legalisasi', '=', 'onProgress')->latest()->get();
+        $bidangId = Auth::user()->bidang_id;
+        $arsips = Arsip::with('user.bidang')->whereHas('user', function ($query) use ($bidangId) {
+            $query->where('bidang_id', $bidangId);
+            $query->where('status_legalisasi', 'onProgress');
+        })->latest()->get();
         $data = [
             'active' => 'dataArsipBelumLegal',
             'open' => 'arsip',
             'link' => 'Arsip | Data Arsip Belum Legalisasi',
             'arsips' => $arsips
         ];
-        return view('kaban.arsip.belumLegal', $data);
+        return view('legalizer.arsip.belumLegal', $data);
     }
 
     /**

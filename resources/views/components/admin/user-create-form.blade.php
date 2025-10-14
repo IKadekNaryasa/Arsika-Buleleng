@@ -28,14 +28,22 @@
                                 <label class="form-label">Email</label>
                                 <input type="email" name="email" class="form-control" value="{{ old('email') }}" required placeholder="masukan Email aktif">
                             </div>
-
                             <div class="col-md-3 mb-3">
                                 <label class="form-label">Role</label>
                                 <select name="role" class="form-control" required>
                                     <option value="operator" selected>Operator</option>
                                     <option value="admin">Admin</option>
-                                    <option value="kepala_badan">Kepala Badan</option>
+                                    <option value="legalizer">Legalizer</option>
+                                    <option value="sekban">Sekretaris Badan</option>
                                 </select>
+                            </div>
+                            <div class="col-md-5 mb-3">
+                                <label class="form-label">Jabatan</label>
+                                <input type="text" name="jabatan" class="form-control" value="{{ old('jabatan') }}" required placeholder="Jabatan">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">NIP</label>
+                                <input type="text" name="nip" class="form-control" value="{{ old('nip') }}" required placeholder="NIP">
                             </div>
                         </div>
                     </div>

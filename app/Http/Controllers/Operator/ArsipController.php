@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\Operator;
 
+use App\Models\User;
 use App\Models\Arsip;
 use App\Models\Bidang;
+use App\Helpers\PdfHelper;
 use Illuminate\Http\Request;
 use Psy\Exception\Exception;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use App\Helpers\PdfHelper;
+use Illuminate\Support\Facades\Validator;
 
 
 class ArsipController extends Controller
@@ -22,6 +25,8 @@ class ArsipController extends Controller
     public function index()
     {
         $bidangId = Auth::user()->bidang_id;
+        $legalizers = User::where('bidang_id', $bidangId)->where('role', 'legalizer')->get();
+        $sekbans = User::where('role', 'sekban')->get();
 
         $arsips = Arsip::with('user.bidang')->whereHas('user', function ($query) use ($bidangId) {
             $query->where('bidang_id', $bidangId);
@@ -31,7 +36,9 @@ class ArsipController extends Controller
             'active' => 'dataArsip',
             'open' => 'arsip',
             'link' => 'Arsip | Data Arsip',
-            'arsips' => $arsips
+            'arsips' => $arsips,
+            'sekbans' => $sekbans,
+            'legalizer' => $legalizers
         ];
         return view('operator.arsip.index', $data);
     }
@@ -248,8 +255,6 @@ class ArsipController extends Controller
     {
         try {
             $filePath = $arsip->path_file;
-            $fileName = $arsip->nama_file;
-            $kodeArsip = $arsip->kode_arsip;
 
             $fileDeleted = false;;
             if ($filePath) {
@@ -259,7 +264,7 @@ class ArsipController extends Controller
                     } else {
                         $fileDeleted = true;
                     }
-                } catch (\Exception $driverError) {
+                } catch (Exception $e) {
                     return redirect()->route('arsip.index')
                         ->withErrors(['errors' => 'Gagal menghapus file dari Google Drive']);
                 }
@@ -273,5 +278,79 @@ class ArsipController extends Controller
         } catch (Exception $e) {
             return redirect()->route('arsip.index')->withErrors(['errors' => 'Gagal menghapus data!']);
         }
+    }
+
+
+    public function cetak(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'tahun' => 'required|numeric',
+            'sekban' => 'required|string',
+            'legalizer' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator->errors());
+        }
+
+        $credential = $validator->validate();
+        $tahun = $credential['tahun'];
+        $sekban = $credential['sekban'];
+        $legalizerId = $credential['legalizer'];
+        $user = User::where('id', $legalizerId)->firstOrFail();
+        $legalizer = $user->name;
+        $jabatan = $user->jabatan;
+
+        $bidangId = Auth::user()->bidang_id;
+        $bidangNama = Auth::user()->bidang->nama_bidang ?? 'Bidang';
+        $kodeBidang = Auth::user()->bidang->kode_bidang;
+
+        $dataLaporan = DB::table('arsips')
+            ->join('users', 'arsips.user_id', '=', 'users.id')
+            ->select(
+                'arsips.kode_klasifikasi',
+                DB::raw('MAX(arsips.uraian) as uraian'),
+                'arsips.type',
+                DB::raw('COUNT(*) as jumlah')
+            )
+            ->where('users.bidang_id', $bidangId)
+            ->whereYear('arsips.tanggal_arsip', $tahun)
+            ->groupBy('arsips.kode_klasifikasi', 'arsips.type')
+            ->orderBy('arsips.kode_klasifikasi')
+            ->orderBy('arsips.type')
+            ->get();
+
+        $formattedData = [];
+        $grandTotal = 0;
+        $nomorUrut = 1;
+
+        foreach ($dataLaporan as $item) {
+            $grandTotal += $item->jumlah;
+
+            $formattedData[] = [
+                'no' => $nomorUrut++,
+                'kode_klasifikasi' => $item->kode_klasifikasi,
+                'uraian' => $item->uraian,
+                'kurun_waktu' => $tahun,
+                'jumlah' => $item->jumlah,
+                'ket' => ucfirst($item->type)
+            ];
+        }
+
+        $pdf = PDF::loadView('operator.arsip.cetak_laporan', [
+            'dataLaporan' => $formattedData,
+            'grandTotal' => $grandTotal,
+            'tahun' => $tahun,
+            'bidangNama' => $bidangNama,
+            'legalizer' => $legalizer,
+            'sekban' => $sekban,
+            'jabatan' => $jabatan,
+            'nip' => $user->nip,
+            'tanggalCetak' => now()->format('d-m-Y')
+        ]);
+
+        $pdf->setPaper('a4', 'landscape');
+
+        return $pdf->stream('Laporan-Arsip-' . $kodeBidang . '-' . $tahun . '.pdf');
     }
 }

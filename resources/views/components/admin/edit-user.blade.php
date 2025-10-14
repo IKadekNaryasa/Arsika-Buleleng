@@ -39,6 +39,14 @@
                                     <option value="kepala_badan">Kepala Badan</option>
                                 </select>
                             </div>
+                            <div class="col-md-5 mb-3">
+                                <label class="form-label">Jabatan</label>
+                                <input type="text" name="jabatan" class="form-control" value="{{ old('jabatan') ?? $user->jabatan }}" required placeholder="Jabatan">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">NIP</label>
+                                <input type="text" name="nip" class="form-control" value="{{ old('nip') ?? $user->nip }}" required placeholder="NIP">
+                            </div>
                         </div>
                     </div>
                 </div>

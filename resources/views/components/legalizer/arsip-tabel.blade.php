@@ -36,7 +36,7 @@
                             <td style="font-size: small;" class="justify-content-center d-flex">
                                 <ul class="list-unstyled d-flex mb-0">
                                     <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="left" class="pull-up" title="Pratinjau">
-                                        <a href="{{ route('kbn.arsip.show', $arsip->id) }}?v={{ $arsip->updated_at->timestamp }}" target="_blank" class="mx-2 text-primary">
+                                        <a href="{{ route('legalizer.arsip.show', $arsip->id) }}?v={{ $arsip->updated_at->timestamp }}" target="_blank" class="mx-2 text-primary">
                                             <i class='bx bxs-show'></i>
                                         </a>
                                     </li>
@@ -51,6 +51,7 @@
                         @endforeach
                     </tbody>
                 </table>
+
                 @foreach($arsips as $arsip)
                 <div class="modal fade" id="modalDetail-{{ $arsip->kode_arsip }}" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">

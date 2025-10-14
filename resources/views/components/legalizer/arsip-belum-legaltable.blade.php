@@ -65,7 +65,7 @@
                             <td style="font-size: small;" class="justify-content-center d-flex">
                                 <ul class="list-unstyled d-flex mb-0 align-middle">
                                     <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="left" class="pull-up" title="Pratinjau">
-                                        <a href="{{ route('kbn.arsip.show', $arsip->id) }}" target="_blank" class="mx-2 text-primary">
+                                        <a href="{{ route('legalizer.arsip.show', $arsip->id) }}" target="_blank" class="mx-2 text-primary">
                                             <i class='bx bxs-show'></i>
                                         </a>
                                     </li>
@@ -127,7 +127,7 @@
                                                         <div class="row mb-2">
                                                             <div class="col-4 fw-bold">Pratinjau</div>
                                                             <div class="col-8">:
-                                                                <a href="{{ route('kbn.arsip.show', $arsip->id) }}?v={{ $arsip->updated_at->timestamp }}" target="_blank" class="mx-2 text-primary">
+                                                                <a href="{{ route('legalizer.arsip.show', $arsip->id) }}?v={{ $arsip->updated_at->timestamp }}" target="_blank" class="mx-2 text-primary">
                                                                     <i class='bx bxs-show'></i>
                                                                 </a>
                                                             </div>
@@ -136,7 +136,7 @@
                                                         <div class="row mb-2">
                                                             <div class="col-4 fw-bold">Legalisasi</div>
                                                             <div class="col-8 d-flex">:
-                                                                <form action="{{ route('kbn.arsip.legalisasi') }}?v={{ $arsip->updated_at->timestamp }}" method="post" class="form-legalisasi">
+                                                                <form action="{{ route('legalizer.arsip.legalisasi') }}?v={{ $arsip->updated_at->timestamp }}" method="post" class="form-legalisasi">
                                                                     @csrf
                                                                     <input type="hidden" name="kode_arsip" value="{{ $arsip->kode_arsip }}">
                                                                     <button class="btn btn-sm btn-primary ms-1" type="submit">Legalisasi</button>

@@ -47,8 +47,8 @@ class Authenticate extends Controller
                     case 'operator':
                         $route = 'dashboard';
                         break;
-                    case 'kepala_badan':
-                        $route = 'kbn.dashboard';
+                    case 'legalizer':
+                        $route = 'legalizer.dashboard';
                         break;
                     case 'admin':
                         $route = 'admin.dashboard';

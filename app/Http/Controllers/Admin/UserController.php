@@ -56,7 +56,9 @@ class UserController extends Controller
             'bidang' => 'required|exists:bidangs,id',
             'nama' => 'required|string',
             'email' => 'required|email|unique:users,email',
-            'role' => 'required|in:operator,admin,kepala_badan',
+            'role' => 'required|in:operator,admin,legalizer,sekban',
+            'jabatan' => 'required|string',
+            'nip' => 'required|string|unique:users,nip'
         ]);
 
         if ($validator->fails()) {
@@ -77,6 +79,8 @@ class UserController extends Controller
                     'password' => Hash::make('12345678'),
                     'status' => 'nonActive',
                     'verification_token' => $verificationToken,
+                    'jabatan' => $credential['jabatan'],
+                    'nip' => $credential['nip']
                 ]);
                 Mail::to($user->email)->send(new UserActivationMail($user));
             });
@@ -125,7 +129,9 @@ class UserController extends Controller
             'bidang' => 'required|exists:bidangs,id',
             'nama' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'role' => 'required|in:operator,admin,kepala_badan',
+            'nip' => 'required|email|unique:users,nip,' . $user->id,
+            'jabatan' => 'required|string',
+            'role' => 'required|in:operator,admin,legalizer,sekban',
         ]);
 
         if ($validator->fails()) {
@@ -145,7 +151,9 @@ class UserController extends Controller
                         'email' => e($credential['email']),
                         'role' => e($credential['role']),
                         'status' => 'nonActive',
+                        'jabatan' => $credential['jabatan'],
                         'verification_token' => $verificationToken,
+                        'nip' => $credential['nip']
                     ]);
                 } else {
                     $user->update([
@@ -153,6 +161,8 @@ class UserController extends Controller
                         'name' => $credential['nama'],
                         'email' => $credential['email'],
                         'role' => $credential['role'],
+                        'jabatan' => $credential['jabatan'],
+                        'nip' => $credential['nip']
                     ]);
                 }
             });

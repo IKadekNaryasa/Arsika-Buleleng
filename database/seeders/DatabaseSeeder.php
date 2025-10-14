@@ -51,11 +51,13 @@ class DatabaseSeeder extends Seeder
         User::create([
             'id' => Str::uuid()->toString(),
             'bidang_id' => $uuidAdmin,
-            'name' => 'Admin Arsika',
+            'name' => 'I Kadek Naryasa, S.Kom',
             'role' => 'admin',
             'email' => 'arsikabuleleng@gmail.com',
             'email_verified_at' => now(),
-            'password' => Hash::make('12345678')
+            'password' => Hash::make('12345678'),
+            'jabatan' => "Pranata Komputer Ahli Pertama",
+            'nip' => '200206092025061001'
         ]);
 
         $this->call([

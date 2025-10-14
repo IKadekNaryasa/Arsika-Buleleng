@@ -1,7 +1,7 @@
-@props(['arsips'])
+@props(['arsips','sekbans','legalizers'])
 
-{{-- CSS untuk Loading Overlay --}}
 <x-overlay-delete></x-overlay-delete>
+<x-overlay-cetak></x-overlay-cetak>
 
 <div class="row">
     <div class="card mb-4">
@@ -145,7 +145,6 @@
     </div>
 </div>
 
-<!-- modal change password -->
 <div class="modal fade" id="modalCetak" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -157,22 +156,48 @@
                     data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
-            <form action="" method="post" id="cetakLaporanForm">
+            <form action="{{ route('arsip.cetak') }}" method="post" id="cetakLaporanForm">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12 mb-3 ">
                             <div class="d-flex justify-content-between">
-                                <label class="form-label" for="oldPassword">Tahun</label>
+                                <label class="form-label" for="sekban">Sekretaris Badan</label>
+                            </div>
+                            <select name="sekban" id="sekban" class="form-control">
+                                @foreach ($sekbans as $sekban)
+                                <option value="{{ $sekban->name }}">{{ $sekban->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-12 mb-3 ">
+                            <div class="d-flex justify-content-between">
+                                <label class="form-label" for="legalizer">Legalizer</label>
+                            </div>
+                            <select name="legalizer" id="legalizer" class="form-control">
+                                @foreach ($legalizers as $legalizer)
+                                <option value="{{ $legalizer->id }}">{{ $legalizer->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-12 mb-3 ">
+                            <div class="d-flex justify-content-between">
+                                <label class="form-label" for="tahun">Tahun</label>
                             </div>
                             <select name="tahun" id="tahun" class="form-control">
-                                <option value="2025">2025</option>
-                            </select>
+                                @php
+                                $currentYear = date('Y');
+                                for ($i = 0; $i < 5; $i++) {
+                                    $year=$currentYear - $i;
+                                    echo "<option value='$year'>$year</option>" ;
+                                    }
+                                    @endphp
+                                    </select>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Cetak</button>
+                    <button type="submit" class="btn btn-primary" id="btn-cetak">Cetak</button>
                 </div>
             </form>
         </div>
@@ -224,6 +249,38 @@
 
     window.addEventListener('pageshow', function(event) {
         hideDeleteLoading();
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const cetakForm = document.getElementById('cetakLaporanForm');
+        const loadingOverlay = document.getElementById('loadingOverlayCetak');
+
+        if (cetakForm && loadingOverlay) {
+            cetakForm.addEventListener('submit', function(e) {
+                loadingOverlay.classList.remove('d-none');
+
+                const btnCetak = document.getElementById('btn-cetak');
+                if (btnCetak) {
+                    btnCetak.disabled = true;
+                    btnCetak.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Mencetak...';
+                }
+
+                setTimeout(function() {
+                    loadingOverlay.classList.add('d-none');
+
+                    if (btnCetak) {
+                        btnCetak.disabled = false;
+                        btnCetak.innerHTML = 'Cetak';
+                    }
+
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('modalCetak'));
+                    if (modal) {
+                        modal.hide();
+                    }
+                }, 3000);
+            });
+        }
     });
 </script>
 @endpush
