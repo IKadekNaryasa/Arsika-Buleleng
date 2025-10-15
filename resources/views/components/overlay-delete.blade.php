@@ -4,7 +4,7 @@
         <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
             <span class="visually-hidden">Loading...</span>
         </div>
-        <h5 class="text-primary">Menyimpan Data...</h5>
+        <h5 class="text-primary">Menghapus Data...</h5>
         <p class="text-muted">Mohon tunggu, Sedang Menghapus data!</p>
     </div>
 </div>

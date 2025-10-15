@@ -59,10 +59,11 @@
                                     </li>
                                 </ul>
 
-                                <form method="POST" id="deleteForm-{{ $arsip->id }}" action="{{ route('arsip.destroy', $arsip->id) }}" style="display: none;">
+                                <form method="POST" id="deleteForm_{{ $arsip->id }}" action="{{ route('arsip.destroy', $arsip->id) }}" style="display: none;">
                                     @csrf
                                     @method('DELETE')
                                 </form>
+
 
                                 <div class="modal fade" id="modalDetail-{{ $arsip->kode_arsip }}" tabindex="-1" aria-hidden="true">
                                     <div class="modal-dialog modal-lg" role="document">
@@ -225,27 +226,32 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $(button).addClass('delete-button-loading');
-                const overlay = document.getElementById('deleteLoadingOverlay');
-                overlay.style.display = 'flex';
-                const form = document.getElementById('deleteForm-' + arsipId);
+                const overlay = document.getElementById('loadingOverlay');
+                if (overlay) {
+                    overlay.classList.remove('d-none');
+                }
+
+                const form = document.getElementById('deleteForm_' + arsipId);
                 if (form) {
                     form.submit();
                 } else {
-                    console.error('Form delete tidak ditemukan: deleteForm-' + arsipId);
-                    overlay.style.display = 'none';
+                    console.error('Form delete tidak ditemukan: deleteForm_' + arsipId);
+                    if (overlay) overlay.classList.add('d-none');
                     $(button).removeClass('delete-button-loading');
                 }
             }
         });
     }
 
+
     function hideDeleteLoading() {
-        const loadingOverlay = document.getElementById('deleteLoadingOverlay');
+        const loadingOverlay = document.getElementById('loadingOverlay');
         if (loadingOverlay) {
-            loadingOverlay.style.display = 'none';
+            loadingOverlay.classList.add('d-none');
         }
         $('.delete-button-loading').removeClass('delete-button-loading');
     }
+
 
     window.addEventListener('pageshow', function(event) {
         hideDeleteLoading();
