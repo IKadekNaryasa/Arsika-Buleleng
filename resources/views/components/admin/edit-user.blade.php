@@ -46,7 +46,7 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">NIP</label>
-                                <input type="text" name="nip" class="form-control" value="{{ old('nip') ?? $user->nip }}" required placeholder="NIP">
+                                <input type="number" name="nip" class="form-control" value="{{ old('nip') ?? $user->nip }}" required placeholder="NIP">
                             </div>
                         </div>
                     </div>
