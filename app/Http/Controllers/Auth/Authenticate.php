@@ -15,13 +15,21 @@ class Authenticate extends Controller
     {
         $sanitize = [
             'email' => e($request->input('email')),
-            'password' => e($request->input('password'))
+            'password' => e($request->input('password')),
+        ];
+
+        $messages = [
+            'email.required' => 'Please enter your email address.',
+            'email.email' => 'The email address must be a valid email format.',
+            'password.required' => 'Please enter your password.',
+            'password.min' => 'Your password must be at least :min characters long.',
         ];
 
         $validator = Validator::make($sanitize, [
             'email' => ['required', 'email'],
-            'password' => ['required', 'min:8']
-        ])->validate();
+            'password' => ['required', 'min:8'],
+        ], $messages)->validate();
+
 
         $credential = [
             'email' => $validator['email'],
