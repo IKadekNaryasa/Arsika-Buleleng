@@ -19,9 +19,9 @@
                             <th style="font-size: small;">No</th>
                             <th style="font-size: small;">Kode Arsip</th>
                             <th style="font-size: small;">Klasifikasi</th>
+                            <th style="font-size: small;">Uraian</th>
                             <th style="font-size: small;">Legalisasi</th>
                             <th style="font-size: small;">Type</th>
-                            <th style="font-size: small;">Bidang</th>
                             <th style="font-size: small;" class="text-center">Action</th>
                         </tr>
                     </thead>
@@ -31,6 +31,7 @@
                             <td style="font-size: small;">{{ $loop->iteration }}</td>
                             <td style="font-size: small;">{{ $arsip->kode_arsip }}</td>
                             <td style="font-size: small;">{{ $arsip->kode_klasifikasi }}</td>
+                            <td style="font-size: small;">{{ $arsip->uraian }}</td>
                             <td style="font-size: small;">
                                 @if ($arsip->status_legalisasi == 'onProgress')
                                 <span class="badge bg-warning">{{ $arsip->status_legalisasi }}</span>
@@ -39,7 +40,6 @@
                                 @endif
                             </td>
                             <td style="font-size: small;">{{ $arsip->type }}</td>
-                            <td style="font-size: small;">{{ $arsip->user->bidang->kode_bidang }}</td>
                             <td style="font-size: small;" class="justify-content-center d-flex">
                                 <ul class="list-unstyled d-flex mb-0">
                                     <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="left" class="pull-up" title="Pratinjau">
