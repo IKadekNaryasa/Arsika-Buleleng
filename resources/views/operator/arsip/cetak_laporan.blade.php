@@ -207,7 +207,7 @@
         </div>
         <div class="footer-right">
             <p>Singaraja, {{ \Carbon\Carbon::parse($tanggalCetak)->locale('id')->translatedFormat('d F Y') }}</p>
-            <p>Init Pengolah, {{$jabatan}}</p>
+            <p>Unit Pengolah, {{$jabatan}}</p>
             <br><br><br><br><br>
             <br>{{ $legalizer }}<br>
             <p>Nip. {{ $nip }}</p>
