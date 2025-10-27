@@ -67,23 +67,42 @@ class ArsipController extends Controller
     {
         try {
             $rules = [];
+            $messages = [];
             $arsipData = $request->input('arsip', []);
 
             foreach ($arsipData as $index => $data) {
                 $rules["arsip.{$index}.kategori_arsip"] = 'required|in:arsip_aktif,arsip_inAktif,lainnya';
                 $rules["arsip.{$index}.kode_klasifikasi"] = 'required|string|max:255';
                 $rules["arsip.{$index}.tanggal_arsip"] = 'required|date';
-                $rules["arsip.{$index}.nama_file"] = 'required|mimes:pdf|max:20240';
+                $rules["arsip.{$index}.nama_file"] = 'required|mimes:pdf|max:3072';
                 $rules["arsip.{$index}.uraian"] = 'required|string';
                 $rules["arsip.{$index}.type"] = 'required|string';
+
+                $messages["arsip.{$index}.kategori_arsip.required"] = "Kategori arsip ke-" . ($index + 1) . " wajib dipilih.";
+                $messages["arsip.{$index}.kategori_arsip.in"] = "Kategori arsip ke-" . ($index + 1) . " tidak valid.";
+
+                $messages["arsip.{$index}.kode_klasifikasi.required"] = "Kode klasifikasi pada arsip ke-" . ($index + 1) . " wajib diisi.";
+                $messages["arsip.{$index}.kode_klasifikasi.max"] = "Kode klasifikasi pada arsip ke-" . ($index + 1) . " tidak boleh lebih dari 255 karakter.";
+
+                $messages["arsip.{$index}.tanggal_arsip.required"] = "Tanggal arsip ke-" . ($index + 1) . " wajib diisi.";
+                $messages["arsip.{$index}.tanggal_arsip.date"] = "Tanggal arsip ke-" . ($index + 1) . " harus berupa format tanggal yang valid.";
+
+                $messages["arsip.{$index}.nama_file.required"] = "File arsip ke-" . ($index + 1) . " wajib diunggah.";
+                $messages["arsip.{$index}.nama_file.mimes"] = "File arsip ke-" . ($index + 1) . " harus berformat PDF.";
+                $messages["arsip.{$index}.nama_file.max"] = "Ukuran file arsip ke-" . ($index + 1) . " tidak boleh lebih dari 3 MB.";
+
+                $messages["arsip.{$index}.uraian.required"] = "Uraian arsip ke-" . ($index + 1) . " wajib diisi.";
+
+                $messages["arsip.{$index}.type.required"] = "Jenis file arsip ke-" . ($index + 1) . " wajib dipilih.";
             }
 
-            $request->validate($rules);
+            $request->validate($rules, $messages);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->route('arsip.create')
-                ->withErrors(['errors' => $e->errors()])
+                ->withErrors($e->errors())
                 ->withInput();
         }
+
 
         try {
             try {

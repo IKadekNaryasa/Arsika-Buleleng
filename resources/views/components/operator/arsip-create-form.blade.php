@@ -56,7 +56,7 @@
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Upload File (*.pdf)</label>
+                                <label class="form-label">Upload File (*.pdf) (Max : 3 MB)</label>
                                 <input type="file" name="arsip[0][nama_file]" class="form-control" required accept=".pdf">
                             </div>
                             <div class="col-md-6 mb-3">
