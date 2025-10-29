@@ -86,7 +86,9 @@
 
 @push('script')
 <script>
-    let table = new DataTable('#userTable');
+    let table = new DataTable('#userTable', {
+        ordering: false
+    });
 </script>
 <script>
     const formUpdateUser = document.getElementById('formUpdateUser');

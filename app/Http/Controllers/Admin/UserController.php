@@ -22,7 +22,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('bidang')->get();
+        $users = User::with('bidang')->latest()->get();
         $data = [
             'active' => 'dataUser',
             'link' => 'User',
