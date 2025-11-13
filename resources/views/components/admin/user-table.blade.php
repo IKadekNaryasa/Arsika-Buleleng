@@ -1,4 +1,3 @@
-@props(['users'])
 {{-- Loading Overlay --}}
 <x-overlay></x-overlay>
 
@@ -7,7 +6,7 @@
         <h5 class="card-header text-center">Data User</h5>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table-striped" id="userTable">
+                <table class="table table-striped w-100" id="userTable">
                     <thead>
                         <tr>
                             <th style="font-size: small;">Nama</th>
@@ -87,7 +86,8 @@
 @push('script')
 <script>
     let table = new DataTable('#userTable', {
-        ordering: false
+        ordering: false,
+        autoWidth: false,
     });
 </script>
 <script>

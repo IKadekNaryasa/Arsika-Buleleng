@@ -6,7 +6,7 @@
         <h5 class="card-header text-center">Data Bidang</h5>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table-striped" id="bidangTable">
+                <table class="table table-striped w-100" id="bidangTable">
                     <thead>
                         <tr>
                             <th style="font-size: small;">No</th>
@@ -41,6 +41,9 @@
 
 @push('script')
 <script>
-    let table = new DataTable('#bidangTable');
+    let table = new DataTable('#bidangTable', {
+        ordering: false,
+        autoWidth: false,
+    });
 </script>
 @endpush()

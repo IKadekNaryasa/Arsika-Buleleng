@@ -35,7 +35,7 @@
         <h5 class="card-header text-center">Data Arsip Belum dilegalisasi</h5>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table-striped" id="arsipTable">
+                <table class="table w-100 table-striped" id="arsipTable">
                     <thead>
                         <tr>
                             <th style="font-size: small;">No</th>
@@ -164,7 +164,9 @@
 
 @push('script')
 <script>
-    let table = new DataTable('#arsipTable');
+    let table = new DataTable('#arsipTable', {
+        autoWidth: false,
+    });
 </script>
 
 @push('script')
