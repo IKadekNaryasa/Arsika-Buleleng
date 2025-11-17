@@ -11,6 +11,7 @@
     <title>ARSIKA</title>
 
     <meta name="description" content="Page of Operator">
+    <link rel="canonical" href="{{ url()->current() }}">
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('ikn_sneat/assets/img/favicon/favicon.ico') }}?v={{ time() }}" />
 
@@ -181,12 +182,12 @@
                                     <li>
                                         <span class="dropdown-item">
                                             <div class="d-flex">
-                                                <div class="flex-shrink-0 me-3">
+                                                <div class="shrink-0 me-3">
                                                     <div class="avatar avatar-online">
                                                         <img src="{{ asset('img/arsika.png') }}" alt class="w-px-40 h-auto rounded-circle" />
                                                     </div>
                                                 </div>
-                                                <div class="flex-grow-1">
+                                                <div class="grow">
                                                     <span class="fw-semibold d-block">{{auth()->user()->name}}
                                                         <small class="text-muted">
                                                             <i class="badge rounded-pill bg-success">
@@ -231,7 +232,7 @@
                 <div class="content-wrapper">
                     <!-- Content -->
 
-                    <div class="container-fluid flex-grow-1 container-p-y">
+                    <div class="container-fluid grow container-p-y">
                         {{$slot}}
                     </div>
                     <!-- / Content -->
