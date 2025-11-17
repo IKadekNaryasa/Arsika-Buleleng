@@ -12,6 +12,7 @@
 
     <meta name="description" content="Page of Admin">
 
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('ikn_sneat/assets/img/favicon/favicon.ico') }}?v={{ time() }}" />
 
