@@ -10,8 +10,8 @@
 
     <title>ARSIKA</title>
 
-    <meta name="description" content="" />
-
+    <meta name="description" content="Page of Operator">
+    <link rel="canonical" href="https://arsika-buleleng.iknproject.site/">
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('ikn_sneat/assets/img/favicon/favicon.ico') }}?v={{ time() }}" />
 
