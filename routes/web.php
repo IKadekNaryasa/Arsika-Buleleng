@@ -13,8 +13,6 @@ Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard'
 Route::get('admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard')->middleware(ArsikaAdmin::class);
 Route::get('legalizer/dashboard', [LegalizerDashboardController::class, 'index'])->name('legalizer.dashboard')->middleware(ArsikaLegalizer::class);
 
-
-
 // Arsip
 Route::middleware('web')->group(base_path('routes/arsip.php'));
 // Bidang
