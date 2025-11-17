@@ -1,4 +1,2 @@
 User-agent: *
-Allow: /
-
-Sitemap: http://103.226.139.107/sitemap.xml
+Disallow:
