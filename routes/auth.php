@@ -24,7 +24,6 @@ Route::middleware(ArsikaGuest::class)->group(function () {
     Route::post('auth/resetPassword', [ForgotPassword::class, 'reset'])->name('password.update');
 
     Route::get('login', [AuthLogin::class, 'index'])->name('login');
-    Route::get('/', [AuthLogin::class, 'index'])->name('login');
     Route::post('authentication', [Authenticate::class, 'authentication'])->name('auth.authentication');
 });
 
