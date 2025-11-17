@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://iknproject.site/sitemap.xml
+Sitemap: https://arsika-buleleng.iknproject.site/sitemap.xml
