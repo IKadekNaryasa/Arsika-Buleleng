@@ -9,6 +9,9 @@ use App\Http\Controllers\Auth\ChangePassword;
 use App\Http\Controllers\Auth\ForgotPassword;
 use App\Http\Controllers\Auth\VerificationController;
 
+Route::get('/', function () {
+    return view('arsika');
+});
 Route::middleware(ArsikaGuest::class)->group(function () {
     Route::get('/email/verify', function () {
         return view('auth.verify');
