@@ -7,5 +7,7 @@ Route::middleware('web')->group(base_path('routes/arsip.php'));
 Route::middleware('web')->group(base_path('routes/bidang.php'));
 // Authentication
 Route::middleware('web')->group(base_path('routes/auth.php'));
-// Authentication
+// user
 Route::middleware('web')->group(base_path('routes/user.php'));
+// klasifikasi
+Route::middleware('web')->group(base_path('routes/klasifikasi.php'));

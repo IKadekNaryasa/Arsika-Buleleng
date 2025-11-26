@@ -30,7 +30,7 @@
                         <tr>
                             <td style="font-size: small;">{{ $loop->iteration }}</td>
                             <td style="font-size: small;">{{ $arsip->kode_arsip }}</td>
-                            <td style="font-size: small;">{{ $arsip->kode_klasifikasi }}</td>
+                            <td style="font-size: small;">{{ $arsip->kodeKlasifikasi->kode }}</td>
                             <td style="font-size: small;">{{ $arsip->uraian }}</td>
                             <td style="font-size: small;">
                                 @if ($arsip->status_legalisasi == 'onProgress')
@@ -84,7 +84,7 @@
                                                     </div>
                                                     <div class="row mb-2">
                                                         <div class="col-4 fw-bold">Kode Klasifikasi</div>
-                                                        <div class="col-8">: {{ $arsip->kode_klasifikasi }}</div>
+                                                        <div class="col-8">: {{ $arsip->kodeKlasifikasi->kode }}</div>
                                                     </div>
                                                     <div class="row mb-2">
                                                         <div class="col-4 fw-bold">Tanggal Arsip</div>

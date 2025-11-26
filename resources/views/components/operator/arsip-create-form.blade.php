@@ -1,3 +1,4 @@
+@props(['klasifikasies'])
 {{-- Loading Overlay --}}
 <div id="loadingOverlay" class="loading-overlay d-none">
     <div class="loading-content">
@@ -18,7 +19,6 @@
                 <div id="formContainer">
                     <div class="form-item border p-3 mb-3 rounded" data-index="0">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="mb-0">Data Arsip #1</h6>
                             <button type="button" class="btn btn-sm btn-danger remove-form d-none">
                                 <i class="fas fa-trash"></i> Hapus
                             </button>
@@ -27,52 +27,51 @@
                         <div class="row mb-1">
                             <div class="col-md-2 mb-3">
                                 <label class="form-label">Kategori Arsip</label>
-                                <select name="arsip[0][kategori_arsip]" class="form-control" required>
+                                <select name="kategori_arsip" class="form-control" required>
                                     <option value="arsip_aktif">Arsip Aktif</option>
                                     <option value="arsip_inAktif">Arsip In-Aktif</option>
                                     <option value="lainnya">Lainnya</option>
                                 </select>
                             </div>
-                            <div class="col-md-3 mb-3">
+                            <div class="col-md-7 mb-3">
                                 <label class="form-label">Kode Klasifikasi</label>
-                                <input type="text" name="arsip[0][kode_klasifikasi]" class="form-control" required
-                                    placeholder="Masukan Kode Klasifikasi" value="{{ old('arsip[0][kode_klasifikasi]') }}">
+                                <select name="klasifikasi_id" class="form-control" required>
+                                    <option selected disabled>Choose...</option>
+                                    @foreach ($klasifikasies as $klasifikasi)
+                                    <option value="{{ $klasifikasi->id }}">{{ $klasifikasi->kode }} - {{ $klasifikasi->keterangan }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                            <div class="col-md-2 mb-3">
+                            <div class="col-md-3 mb-3">
                                 <label class="form-label">Tanggal Arsip</label>
-                                <input type="date" name="arsip[0][tanggal_arsip]" class="form-control" required>
+                                <input type="date" name="tanggal_arsip" class="form-control" required>
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label class="form-label">Legalisasi</label>
-                                <select name="arsip[0][status_legalisasi]" class="form-control" required>
+                                <select name="status_legalisasi" class="form-control" required>
                                     <option value="belum" selected>Belum Dilegalisasi</option>
                                 </select>
                             </div>
                             <div class="col-md-2 mb-3">
                                 <label class="form-label">Type</label>
-                                <select name="arsip[0][type]" class="form-control" required>
+                                <select name="type" class="form-control" required>
                                     <option value="asli" selected>Asli</option>
                                     <option value="copy">Copy</option>
                                 </select>
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-7 mb-3">
                                 <label class="form-label">Upload File (*.pdf) (Max : 3 MB)</label>
-                                <input type="file" name="arsip[0][nama_file]" class="form-control" required accept=".pdf">
+                                <input type="file" name="nama_file" class="form-control" required accept=".pdf">
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-12 mb-3">
                                 <label class="form-label">Uraian</label>
-                                <input type="text" name="arsip[0][uraian]" class="form-control" required value="{{ old('arsip[0][uraian]') }}">
+                                <input type="text" name="uraian" class="form-control" required value="{{ old('uraian') }}">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
-                        <button type="button" id="addForm" class="btn btn-secondary w-50">
-                            <i class="fas fa-plus"></i> Tambah Form
-                        </button>
-                    </div>
-                    <div class="col-md-6 text-end">
+                    <div class="col-md-12 text-center">
                         <button type="submit" name="submit" id="submitBtn" class="btn btn-success w-50">
                             <span id="submitText">Submit</span>
                             <span id="submitSpinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status"></span>
@@ -116,104 +115,11 @@
     document.addEventListener('DOMContentLoaded', function() {
         let formIndex = 1;
         const formContainer = document.getElementById('formContainer');
-        const addFormBtn = document.getElementById('addForm');
         const arsipForm = document.getElementById('arsipForm');
         const submitBtn = document.getElementById('submitBtn');
         const submitText = document.getElementById('submitText');
         const submitSpinner = document.getElementById('submitSpinner');
         const loadingOverlay = document.getElementById('loadingOverlay');
-
-
-
-        addFormBtn.addEventListener('click', function() {
-            const newForm = createNewForm(formIndex);
-            formContainer.insertAdjacentHTML('beforeend', newForm);
-            toggleRemoveButtons();
-            formIndex++;
-        });
-
-
-        function createNewForm(index) {
-            return `
-            <div class="form-item border p-3 mb-3 rounded" data-index="${index}">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h6 class="mb-0">Data Arsip #${index + 1}</h6>
-                    <button type="button" class="btn btn-sm btn-danger remove-form">
-                        <i class="fas fa-trash"></i> Hapus
-                    </button>
-                </div>
-                
-                <div class="row mb-1">
-                    <div class="col-md-2 mb-3">
-                        <label class="form-label">Kategori Arsip</label>
-                        <select name="arsip[${index}][kategori_arsip]" class="form-control" required>
-                            <option value="arsip_aktif">Arsip Aktif</option>
-                            <option value="arsip_inAktif">Arsip In-Aktif</option>
-                            <option value="lainnya">Lainnya</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Kode Klasifikasi</label>
-                        <input type="text" name="arsip[${index}][kode_klasifikasi]" class="form-control" required 
-                               placeholder="Masukan Kode Klasifikasi">
-                    </div>
-                    <div class="col-md-2 mb-3">
-                        <label class="form-label">Tanggal Arsip</label>
-                        <input type="date" name="arsip[${index}][tanggal_arsip]" class="form-control" required>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Legalisasi</label>
-                        <select name="arsip[${index}][status_legalisasi]" class="form-control" required>
-                            <option value="belum" selected>Belum Dilegalisasi</option>
-                        </select>
-                    </div>
-                     <div class="col-md-2 mb-3">
-                        <label class="form-label">Type</label>
-                            <select name="arsip[${index}][type]" class="form-control" required>
-                                <option value="asli" selected>Asli</option>
-                                <option value="copy" >Copy</option>
-                            </select>
-                        </div>                  
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Upload File (*.pdf)</label>
-                        <input type="file" name="arsip[${index}][nama_file]" class="form-control" required accept=".pdf">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Uraian</label>
-                        <input type="text" name="arsip[${index}][uraian]" class="form-control" required>
-                    </div>
-                </div>
-            </div>
-        `;
-        }
-
-        formContainer.addEventListener('click', function(e) {
-            if (e.target.classList.contains('remove-form') || e.target.parentElement.classList.contains('remove-form')) {
-                const formItem = e.target.closest('.form-item');
-                formItem.remove();
-                updateFormNumbers();
-                toggleRemoveButtons();
-            }
-        });
-
-        function updateFormNumbers() {
-            const forms = document.querySelectorAll('.form-item');
-            forms.forEach((form, index) => {
-                const title = form.querySelector('h6');
-                title.textContent = `Data Arsip #${index + 1}`;
-            });
-        }
-
-        function toggleRemoveButtons() {
-            const forms = document.querySelectorAll('.form-item');
-            const removeButtons = document.querySelectorAll('.remove-form');
-
-            if (forms.length <= 1) {
-                removeButtons.forEach(btn => btn.classList.add('d-none'));
-            } else {
-                removeButtons.forEach(btn => btn.classList.remove('d-none'));
-            }
-        }
 
         arsipForm.addEventListener('submit', function(e) {
             loadingOverlay.classList.remove('d-none');

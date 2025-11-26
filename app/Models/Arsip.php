@@ -13,7 +13,7 @@ class Arsip extends Model
     protected $fillable = [
         'kode_arsip',
         'kategori',
-        'kode_klasifikasi',
+        'klasifikasi_id',
         'tanggal_arsip',
         'nama_file',
         'uraian',
@@ -36,5 +36,10 @@ class Arsip extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function kodeKlasifikasi()
+    {
+        return $this->belongsTo(KodeKlasifikasi::class, 'klasifikasi_id');
     }
 }

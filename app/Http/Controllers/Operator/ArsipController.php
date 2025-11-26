@@ -12,6 +12,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\KodeKlasifikasi;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -28,7 +29,7 @@ class ArsipController extends Controller
         $legalizers = User::where('bidang_id', $bidangId)->where('role', 'legalizer')->get();
         $sekbans = User::where('role', 'sekban')->get();
 
-        $arsips = Arsip::with('user.bidang')->whereHas('user', function ($query) use ($bidangId) {
+        $arsips = Arsip::with(['user.bidang', 'kodeKlasifikasi'])->whereHas('user', function ($query) use ($bidangId) {
             $query->where('bidang_id', $bidangId);
         })->latest()->get();
 
@@ -49,11 +50,13 @@ class ArsipController extends Controller
     public function create()
     {
         $bidangs = Bidang::all();
+        $klasifikasies = KodeKlasifikasi::all();
         $data = [
             'active' => 'createArsip',
             'open' => 'arsip',
             'link' => 'Arsip | Tambah Arsip',
-            'bidangs' => $bidangs
+            'bidangs' => $bidangs,
+            'klasifikasies' => $klasifikasies
         ];
         return view('operator.arsip.create', $data);
     }
@@ -66,35 +69,29 @@ class ArsipController extends Controller
     public function store(Request $request)
     {
         try {
-            $rules = [];
-            $messages = [];
-            $arsipData = $request->input('arsip', []);
+            $rules = [
+                'kategori_arsip' => 'required|in:arsip_aktif,arsip_inAktif,lainnya',
+                'klasifikasi_id' => 'required|string|max:255',
+                'tanggal_arsip' => 'required|date',
+                'nama_file' => 'required|mimes:pdf|max:3072',
+                'uraian' => 'required|string',
+                'type' => 'required|string|in:asli,copy',
+            ];
 
-            foreach ($arsipData as $index => $data) {
-                $rules["arsip.{$index}.kategori_arsip"] = 'required|in:arsip_aktif,arsip_inAktif,lainnya';
-                $rules["arsip.{$index}.kode_klasifikasi"] = 'required|string|max:255';
-                $rules["arsip.{$index}.tanggal_arsip"] = 'required|date';
-                $rules["arsip.{$index}.nama_file"] = 'required|mimes:pdf|max:3072';
-                $rules["arsip.{$index}.uraian"] = 'required|string';
-                $rules["arsip.{$index}.type"] = 'required|string';
-
-                $messages["arsip.{$index}.kategori_arsip.required"] = "Kategori arsip ke-" . ($index + 1) . " wajib dipilih.";
-                $messages["arsip.{$index}.kategori_arsip.in"] = "Kategori arsip ke-" . ($index + 1) . " tidak valid.";
-
-                $messages["arsip.{$index}.kode_klasifikasi.required"] = "Kode klasifikasi pada arsip ke-" . ($index + 1) . " wajib diisi.";
-                $messages["arsip.{$index}.kode_klasifikasi.max"] = "Kode klasifikasi pada arsip ke-" . ($index + 1) . " tidak boleh lebih dari 255 karakter.";
-
-                $messages["arsip.{$index}.tanggal_arsip.required"] = "Tanggal arsip ke-" . ($index + 1) . " wajib diisi.";
-                $messages["arsip.{$index}.tanggal_arsip.date"] = "Tanggal arsip ke-" . ($index + 1) . " harus berupa format tanggal yang valid.";
-
-                $messages["arsip.{$index}.nama_file.required"] = "File arsip ke-" . ($index + 1) . " wajib diunggah.";
-                $messages["arsip.{$index}.nama_file.mimes"] = "File arsip ke-" . ($index + 1) . " harus berformat PDF.";
-                $messages["arsip.{$index}.nama_file.max"] = "Ukuran file arsip ke-" . ($index + 1) . " tidak boleh lebih dari 3 MB.";
-
-                $messages["arsip.{$index}.uraian.required"] = "Uraian arsip ke-" . ($index + 1) . " wajib diisi.";
-
-                $messages["arsip.{$index}.type.required"] = "Jenis file arsip ke-" . ($index + 1) . " wajib dipilih.";
-            }
+            $messages = [
+                'kategori_arsip.required' => 'Kategori arsip wajib dipilih.',
+                'kategori_arsip.in' => 'Kategori arsip tidak valid.',
+                'klasifikasi_id.required' => 'Kode klasifikasi wajib diisi.',
+                'klasifikasi_id.max' => 'Kode klasifikasi tidak boleh lebih dari 255 karakter.',
+                'tanggal_arsip.required' => 'Tanggal arsip wajib diisi.',
+                'tanggal_arsip.date' => 'Tanggal arsip harus berupa format tanggal yang valid.',
+                'nama_file.required' => 'File arsip wajib diunggah.',
+                'nama_file.mimes' => 'File arsip harus berformat PDF.',
+                'nama_file.max' => 'Ukuran file arsip tidak boleh lebih dari 3 MB.',
+                'uraian.required' => 'Uraian arsip wajib diisi.',
+                'type.required' => 'Jenis file arsip wajib dipilih.',
+                'type.in' => 'Jenis file arsip tidak valid.',
+            ];
 
             $request->validate($rules, $messages);
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -118,72 +115,54 @@ class ArsipController extends Controller
 
             $user_id = Auth::user()->id;
             $bidang = Auth::user()->bidang->kode_bidang;
-            $successCount = 0;
-            $failedFiles = [];
 
-            foreach ($arsipData as $index => $data) {
-                try {
-                    $kodeArsip = 'ARSP-BKBP-' . $bidang . '-' . str_replace('-', '', $data['tanggal_arsip']) . '-' . uniqid();
+            $kodeArsip = 'ARSP-BKBP-' . $bidang . '-' . str_replace('-', '', $request->tanggal_arsip) . '-' . uniqid();
 
-                    $file = $request->file("arsip.{$index}.nama_file");
-                    $originalFileName = $file->getClientOriginalName();
-                    $fileName = $kodeArsip . '_' . $originalFileName;
+            $file = $request->file('nama_file');
+            $originalFileName = $file->getClientOriginalName();
+            $fileName = $kodeArsip . '_' . $originalFileName;
 
-                    $folderPath = "Belum_dilegalisasi";
-                    $filePath = $folderPath . '/' . $fileName;
+            $folderPath = "Belum_dilegalisasi";
+            $filePath = $folderPath . '/' . $fileName;
 
-                    $tempPath = storage_path("app/temp_" . uniqid() . ".pdf");
-                    $file->move(dirname($tempPath), basename($tempPath));
+            $tempPath = storage_path("app/temp_" . uniqid() . ".pdf");
+            $file->move(dirname($tempPath), basename($tempPath));
 
-                    $convertedPath = storage_path("app/converted_" . uniqid() . ".pdf");
+            $convertedPath = storage_path("app/converted_" . uniqid() . ".pdf");
 
-                    try {
-                        PdfHelper::convertToPdf14($tempPath, $convertedPath);
-                        Log::info("Ghostscript berhasil convert PDF ");
-                        $finalPath = $convertedPath;
-                    } catch (\Throwable $e) {
-                        Log::warning("Ghostscript gagal convert PDF: " . $e->getMessage());
-                        $finalPath = $tempPath;
-                    }
-
-                    $uploaded = Storage::disk('google')->put($filePath, file_get_contents($finalPath));
-
-                    @unlink($tempPath);
-                    @unlink($convertedPath);
-
-                    if ($uploaded) {
-                        Arsip::create([
-                            'kode_arsip' => $kodeArsip,
-                            'kategori' => e($data['kategori_arsip']),
-                            'kode_klasifikasi' => e($data['kode_klasifikasi']),
-                            'tanggal_arsip' => e($data['tanggal_arsip']),
-                            'nama_file' => $originalFileName,
-                            'uraian' => e($data['uraian']),
-                            'path_file' => $filePath,
-                            'status_legalisasi' => 'onProgress',
-                            'user_id' => $user_id,
-                            'type' => e($data['type'])
-                        ]);
-
-                        $successCount++;
-                    } else {
-                        $failedFiles[] = $originalFileName;
-                    }
-                } catch (\Exception $e) {
-                    $failedFiles[] = $data['nama_file'] ?? "File #" . ($index + 1);
-                }
+            try {
+                PdfHelper::convertToPdf14($tempPath, $convertedPath);
+                Log::info("Ghostscript berhasil convert PDF");
+                $finalPath = $convertedPath;
+            } catch (\Throwable $e) {
+                Log::warning("Ghostscript gagal convert PDF: " . $e->getMessage());
+                $finalPath = $tempPath;
             }
 
-            if ($successCount > 0 && empty($failedFiles)) {
+            $uploaded = Storage::disk('google')->put($filePath, file_get_contents($finalPath));
+
+            @unlink($tempPath);
+            @unlink($convertedPath);
+
+            if ($uploaded) {
+                Arsip::create([
+                    'kode_arsip' => $kodeArsip,
+                    'kategori' => e($request->kategori_arsip),
+                    'klasifikasi_id' => e($request->klasifikasi_id),
+                    'tanggal_arsip' => e($request->tanggal_arsip),
+                    'nama_file' => $originalFileName,
+                    'uraian' => e($request->uraian),
+                    'path_file' => $filePath,
+                    'status_legalisasi' => 'onProgress',
+                    'user_id' => $user_id,
+                    'type' => e($request->type)
+                ]);
+
                 return redirect()->route('arsip.index')
-                    ->with('success', "Berhasil menambahkan {$successCount} arsip!");
-            } elseif ($successCount > 0 && !empty($failedFiles)) {
-                $failedList = implode(', ', $failedFiles);
-                return redirect()->route('arsip.index')
-                    ->with('warning', "Berhasil menambahkan {$successCount} arsip. Gagal upload: {$failedList}");
+                    ->with('success', 'Berhasil menambahkan arsip!');
             } else {
                 return redirect()->route('arsip.create')
-                    ->withErrors(['errors' => 'Semua file gagal diupload!'])
+                    ->withErrors(['errors' => 'Gagal upload file ke Google Drive!'])
                     ->withInput();
             }
         } catch (\Exception $e) {
@@ -331,36 +310,43 @@ class ArsipController extends Controller
         $bidangNama = Auth::user()->bidang->nama_bidang ?? 'Bidang';
         $kodeBidang = Auth::user()->bidang->kode_bidang;
 
-        $dataLaporan = DB::table('arsips')
-            ->join('users', 'arsips.user_id', '=', 'users.id')
-            ->select(
-                'arsips.kode_klasifikasi',
-                DB::raw('MAX(arsips.uraian) as uraian'),
-                'arsips.type',
-                DB::raw('COUNT(*) as jumlah')
-            )
-            ->where('users.bidang_id', $bidangId)
-            ->whereYear('arsips.tanggal_arsip', $tahun)
-            ->groupBy('arsips.kode_klasifikasi', 'arsips.type')
-            ->orderBy('arsips.kode_klasifikasi')
-            ->orderBy('arsips.type')
+        $arsips = Arsip::with(['kodeKlasifikasi', 'user'])
+            ->whereHas('user', function ($query) use ($bidangId) {
+                $query->where('bidang_id', $bidangId);
+            })
+            ->whereYear('tanggal_arsip', $tahun)
             ->get();
+
+        $grouped = $arsips->groupBy(function ($item) {
+            return $item->kodeKlasifikasi->kode . '|' . $item->type;
+        });
 
         $formattedData = [];
         $grandTotal = 0;
         $nomorUrut = 1;
 
-        foreach ($dataLaporan as $item) {
-            $grandTotal += $item->jumlah;
+        foreach ($grouped as $key => $items) {
+            list($kodeKlasifikasi, $type) = explode('|', $key);
+            $jumlah = $items->count();
+            $grandTotal += $jumlah;
 
             $formattedData[] = [
                 'no' => $nomorUrut++,
-                'kode_klasifikasi' => $item->kode_klasifikasi,
-                'uraian' => $item->uraian,
+                'kode_klasifikasi' => $kodeKlasifikasi,
+                'uraian' => $items->first()->uraian,
+                'keterangan' => $items->first()->klasifikasi->keterangan ?? '',
                 'kurun_waktu' => $tahun,
-                'jumlah' => $item->jumlah,
-                'ket' => ucfirst($item->type)
+                'jumlah' => $jumlah,
+                'ket' => ucfirst($type)
             ];
+        }
+
+        usort($formattedData, function ($a, $b) {
+            return strcmp($a['kode_klasifikasi'], $b['kode_klasifikasi']);
+        });
+
+        foreach ($formattedData as $index => &$item) {
+            $item['no'] = $index + 1;
         }
 
         $pdf = PDF::loadView('operator.arsip.cetak_laporan', [

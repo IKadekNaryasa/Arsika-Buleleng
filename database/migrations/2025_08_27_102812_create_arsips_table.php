@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('kode_arsip', 100)->unique()->index('arsip_kodeArsip');
             $table->enum('kategori', ['arsip_aktif', 'arsip_inAktif', 'lainnya'])->default('arsip_aktif');
-            $table->string('kode_klasifikasi');
+            $table->foreignUuid('klasifikasi_id')->constrained('kode_klasifikasis', 'id')->cascadeOnDelete()->cascadeOnUpdate();
             $table->date('tanggal_arsip');
             $table->string('nama_file')->index('arsip_namaFile');
             $table->text('uraian');

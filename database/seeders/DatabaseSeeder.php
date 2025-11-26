@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Bidang;
+use App\Models\KodeKlasifikasi;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
@@ -58,6 +59,22 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('12345678'),
             'jabatan' => "Pranata Komputer Ahli Pertama",
             'nip' => '200206092025061001'
+        ]);
+
+        KodeKlasifikasi::create([
+            'id' => Str::uuid()->toString(),
+            'kode' => '0.0.1.1.3',
+            'keterangan' => 'Tes Kode 1'
+        ]);
+        KodeKlasifikasi::create([
+            'id' => Str::uuid()->toString(),
+            'kode' => '0.0.1.1.4',
+            'keterangan' => 'Tes Kode 2'
+        ]);
+        KodeKlasifikasi::create([
+            'id' => Str::uuid()->toString(),
+            'kode' => '0.0.1.1.5',
+            'keterangan' => 'Tes Kode 3'
         ]);
 
         $this->call([

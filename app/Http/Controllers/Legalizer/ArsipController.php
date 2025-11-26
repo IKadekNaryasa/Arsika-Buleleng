@@ -24,7 +24,7 @@ class ArsipController extends Controller
     public function index()
     {
         $bidangId = Auth::user()->bidang_id;
-        $arsips = Arsip::with('user.bidang')->whereHas('user', function ($query) use ($bidangId) {
+        $arsips = Arsip::with('user.bidang', 'kodeKlasifikasi')->whereHas('user', function ($query) use ($bidangId) {
             $query->where('bidang_id', $bidangId);
         })->latest()->get();
         $data = [
@@ -39,7 +39,7 @@ class ArsipController extends Controller
     public function arsipBelumLegal()
     {
         $bidangId = Auth::user()->bidang_id;
-        $arsips = Arsip::with('user.bidang')->whereHas('user', function ($query) use ($bidangId) {
+        $arsips = Arsip::with('user.bidang', 'kodeKlasifikasi')->whereHas('user', function ($query) use ($bidangId) {
             $query->where('bidang_id', $bidangId);
             $query->where('status_legalisasi', 'onProgress');
         })->latest()->get();
