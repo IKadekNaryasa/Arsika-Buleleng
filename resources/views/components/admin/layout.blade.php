@@ -8,10 +8,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>ARSIKA</title>
+    <title>ARSIKA Buleleng</title>
 
     <meta name="description" content="Page of Admin">
     <link rel="canonical" href="{{ url()->current() }}">
+    <meta property="og:title" content="ARSIKA Buleleng">
+    <meta property="og:site_name" content="ARSIKA Buleleng">
+    <meta name="twitter:title" content="ARSIKA Buleleng">
+
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('ikn_sneat/assets/img/favicon/favicon.ico') }}?v={{ time() }}" />
@@ -45,6 +49,7 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{ asset('ikn_sneat') }}/assets/js/config.js"></script>
+
 
     <!-- <script src="https://kit.fontawesome.com/9254364d26.js" crossorigin="anonymous"></script> -->
 </head>

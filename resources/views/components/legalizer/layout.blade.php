@@ -8,10 +8,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>ARSIKA</title>
+    <title>ARSIKA Buleleng</title>
 
     <meta name="description" content="Page of Legalizer">
     <link rel="canonical" href="{{ url()->current() }}">
+    <meta property="og:title" content="ARSIKA Buleleng">
+    <meta property="og:site_name" content="ARSIKA Buleleng">
+    <meta name="twitter:title" content="ARSIKA Buleleng">
+
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('ikn_sneat/assets/img/favicon/favicon.ico') }}?v={{ time() }}" />

@@ -42,6 +42,43 @@
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{ asset('ikn_sneat') }}/assets/js/config.js"></script>
 
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "GovernmentOrganization",
+            "name": "ARSIKA Buleleng",
+            "alternateName": "Arsip Digital Kesbangpol Buleleng",
+            "url": "https://arsika-buleleng.iknproject.site/",
+            "logo": "https://arsika-buleleng.iknproject.site/img/arsika.png",
+            "description": "Sistem informasi untuk mengelola dan menyimpan data Arsip Kesbangpol Buleleng secara digital.",
+            "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Singaraja",
+                "addressRegion": "Buleleng, Bali",
+                "addressCountry": "ID"
+            }
+        }
+    </script>
+
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [{
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Beranda",
+                    "item": "https://arsika-buleleng.iknproject.site/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Login",
+                    "item": "https://arsika-buleleng.iknproject.site/login"
+                }
+            ]
+        }
+    </script>
     <!-- <script src="https://kit.fontawesome.com/9254364d26.js" crossorigin="anonymous"></script> -->
 </head>
 
