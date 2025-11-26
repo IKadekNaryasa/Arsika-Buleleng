@@ -164,6 +164,25 @@
 
                         </ul>
                     </li>
+                    <li class="menu-item {{ ($open == 'klasifikasi') ? 'open active' : '' }} ">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon bx bxs-barcode"></i>
+                            <div data-i18n="Account Settings">Kode Klasifikasi</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item {{ $active == 'dataKlasifikasi' ? 'active' :'' }} ">
+                                <a href="{{ route('admin.klasifikasi.index') }}" class="menu-link">
+                                    <div data-i18n="Project Data">Data Kode Klasifikasi</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ $active == 'createKode' ? 'active' :'' }} ">
+                                <a href="{{ route('admin.klasifikasi.create') }}" class="menu-link">
+                                    <div data-i18n="Create Project">Create Kode Klasifikasi</div>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
                 </ul>
             </aside>
             <!-- / Menu -->
