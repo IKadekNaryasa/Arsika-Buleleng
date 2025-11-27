@@ -1,9 +1,13 @@
 <?php
 
 use App\Http\Middleware\ArsikaAuth;
+use App\Http\Middleware\ArsikaAdmin;
 use App\Http\Middleware\ArsikaGuest;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\ArsikaOperator;
 use App\Http\Controllers\Auth\AuthLogin;
+use App\Http\Controllers\HomeController;
+use App\Http\Middleware\ArsikaLegalizer;
 use App\Http\Controllers\Auth\Authenticate;
 use App\Http\Controllers\Auth\ChangePassword;
 use App\Http\Controllers\Auth\ForgotPassword;
@@ -11,13 +15,8 @@ use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Operator\DashboardController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Legalizer\DashboardController as LegalizerDashboardController;
-use App\Http\Middleware\ArsikaAdmin;
-use App\Http\Middleware\ArsikaLegalizer;
-use App\Http\Middleware\ArsikaOperator;
 
-Route::get('/', function () {
-    return view('arsika');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware(ArsikaAuth::class, ArsikaOperator::class);
 Route::get('admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard')->middleware(ArsikaAuth::class, ArsikaAdmin::class);
