@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="title" content="ARSIKA Buleleng" />
     <meta name="google-site-verification" content="JTNsgh_fWNxtbuOEiTTb8Qkm-4k6-Ahjl2zn1p_tlws" />
     {!! SEOMeta::generate() !!}
     {!! OpenGraph::generate() !!}
