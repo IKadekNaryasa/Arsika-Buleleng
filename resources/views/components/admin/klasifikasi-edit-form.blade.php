@@ -14,11 +14,11 @@
                         <div class="row mb-1">
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">Kode klasifikasi</label>
-                                <input type="text" name="kode" class="form-control" value="{{ old('kode') ?? $klasifikasi->kode }}" required placeholder="Nama klasifikasi">
+                                <input type="text" name="kode" class="form-control" value="{{ old('kode') ?? $klasifikasi->kode }}" required placeholder="Kode Klasifikasi">
                             </div>
                             <div class="col-md-8 mb-3">
                                 <label class="form-label">Keterangan</label>
-                                <input type="text" name="keterangan" class="form-control" value="{{ old('keterangan' ) ?? $klasifikasi->keterangan }}" required placeholder="Kode klasifikasi">
+                                <input type="text" name="keterangan" class="form-control" value="{{ old('keterangan' ) ?? $klasifikasi->keterangan }}" required placeholder="Keterangan">
                             </div>
                         </div>
                     </div>

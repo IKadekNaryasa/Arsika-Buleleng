@@ -12,11 +12,11 @@
                         <div class="row mb-1">
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">Kode Klasifikasi</label>
-                                <input type="text" name="kode" class="form-control" value="{{ old('kode') }}" required placeholder="Nama Bidang">
+                                <input type="text" name="kode" class="form-control" value="{{ old('kode') }}" required placeholder="Kode Klasifikasi">
                             </div>
                             <div class="col-md-8 mb-3">
                                 <label class="form-label">Keterangan</label>
-                                <input type="text" name="keterangan" class="form-control" value="{{ old('keterangan') }}" required placeholder="Kode Bidang">
+                                <input type="text" name="keterangan" class="form-control" value="{{ old('keterangan') }}" required placeholder="Keterangan">
                             </div>
                         </div>
                     </div>
