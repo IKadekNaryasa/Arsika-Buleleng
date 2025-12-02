@@ -10,11 +10,11 @@
                 <div id="formContainer">
                     <div class="form-item border p-3 mb-3 rounded" data-index="0">
                         <div class="row mb-1">
-                            <div class="col-md-8 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label class="form-label">Kode Klasifikasi</label>
                                 <input type="text" name="kode" class="form-control" value="{{ old('kode') }}" required placeholder="Nama Bidang">
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-8 mb-3">
                                 <label class="form-label">Keterangan</label>
                                 <input type="text" name="keterangan" class="form-control" value="{{ old('keterangan') }}" required placeholder="Kode Bidang">
                             </div>
