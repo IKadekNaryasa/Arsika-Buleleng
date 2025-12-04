@@ -21,7 +21,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
         rel="stylesheet" />
-
+    <!-- Google reCAPTCHA -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <!-- Icons. Uncomment required icon fonts -->
     <link rel="stylesheet" href="{{ asset('ikn_sneat') }}/assets/vendor/fonts/boxicons.css" />
 
@@ -135,6 +136,13 @@
                                             <small>Forgot Password?</small>
                                         </a>
                                     </div>
+                                    <div class="mb-3">
+                                        {!! NoCaptcha::display() !!}
+                                        @error('g-recaptcha-response')
+                                        <span class="text-danger" style="font-size: 0.875rem;">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
 
                                     <div class="mb-3">
                                         <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>

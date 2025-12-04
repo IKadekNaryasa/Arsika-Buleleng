@@ -32,7 +32,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'status',
         'verification_token',
         'jabatan',
-        'nip'
+        'nip',
+        'loggedIn'
     ];
 
     /**
