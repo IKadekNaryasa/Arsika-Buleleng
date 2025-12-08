@@ -80,7 +80,7 @@ class Authenticate extends Controller
                         return redirect()->route('login')->withErrors(['errors' => 'Invalid Credential!']);
                 }
 
-                User::where('id', $authenticatedUser->id)->update(['loggedIn' => true]);
+                // User::where('id', $authenticatedUser->id)->update(['loggedIn' => true]);
 
                 return redirect()->intended(route($route))->with('success', 'Login Success!');
             }
@@ -97,9 +97,9 @@ class Authenticate extends Controller
     public function logout(Request $request)
     {
         try {
-            $userId = Auth::user()->id;
-            $loggedInUser = User::find($userId);
-            $loggedInUser->update(['loggedIn' => false]);
+            // $userId = Auth::user()->id;
+            // $loggedInUser = User::find($userId);
+            // $loggedInUser->update(['loggedIn' => false]);
             Auth::logout();
 
             $request->session()->invalidate();
