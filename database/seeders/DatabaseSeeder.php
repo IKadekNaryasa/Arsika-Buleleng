@@ -61,24 +61,10 @@ class DatabaseSeeder extends Seeder
             'nip' => '200206092025061001'
         ]);
 
-        KodeKlasifikasi::create([
-            'id' => Str::uuid()->toString(),
-            'kode' => '0.0.1.1.3',
-            'keterangan' => 'Tes Kode 1'
-        ]);
-        KodeKlasifikasi::create([
-            'id' => Str::uuid()->toString(),
-            'kode' => '0.0.1.1.4',
-            'keterangan' => 'Tes Kode 2'
-        ]);
-        KodeKlasifikasi::create([
-            'id' => Str::uuid()->toString(),
-            'kode' => '0.0.1.1.5',
-            'keterangan' => 'Tes Kode 3'
-        ]);
 
         $this->call([
             GoogleAccessTokenSeeder::class,
+            KodeKlasifikasiSeeder::class
         ]);
     }
 }
