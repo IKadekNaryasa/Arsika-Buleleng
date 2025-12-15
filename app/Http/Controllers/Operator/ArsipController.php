@@ -76,6 +76,8 @@ class ArsipController extends Controller
                 'nama_file' => 'required|mimes:pdf|max:3072',
                 'uraian' => 'required|string',
                 'type' => 'required|string|in:asli,copy',
+                'masa_aktif' => 'required|numeric',
+                'nomor_dokumen' => 'required|string|unique:arsips,nomor_dokumen',
             ];
 
             $messages = [
@@ -91,6 +93,11 @@ class ArsipController extends Controller
                 'uraian.required' => 'Uraian arsip wajib diisi.',
                 'type.required' => 'Jenis file arsip wajib dipilih.',
                 'type.in' => 'Jenis file arsip tidak valid.',
+                'masa_aktif.required' => 'Masa aktif wajib diisi!',
+                'masa_aktif.numeric' => 'Masa aktif harus berupa angka!',
+                'nomor_dokumen.required' => 'Nomor dokumen wajib diisi!',
+                'nomor_dokumen.string' => 'Nomor dokumen harus berupa text!',
+                'nomor_dokumen.unique' => 'Nomor dokumen sudah ada!'
             ];
 
             $request->validate($rules, $messages);
@@ -116,7 +123,7 @@ class ArsipController extends Controller
             $user_id = Auth::user()->id;
             $bidang = Auth::user()->bidang->kode_bidang;
 
-            $kodeArsip = 'ARSP-BKBP-' . $bidang . '-' . str_replace('-', '', $request->tanggal_arsip) . '-' . uniqid();
+            $kodeArsip = 'ARSP-BKBP' . '-' . $bidang . '-' . str_replace('-', '', $request->tanggal_arsip) . '-' . uniqid();
 
             $file = $request->file('nama_file');
             $originalFileName = $file->getClientOriginalName();
@@ -155,7 +162,9 @@ class ArsipController extends Controller
                     'path_file' => $filePath,
                     'status_legalisasi' => 'onProgress',
                     'user_id' => $user_id,
-                    'type' => e($request->type)
+                    'type' => e($request->type),
+                    'masa_aktif' => strip_tags($request->masa_aktif),
+                    'nomor_dokumen' => strip_tags($request->nomor_dokumen),
                 ]);
 
                 return redirect()->route('arsip.index')

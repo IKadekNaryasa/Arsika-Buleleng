@@ -66,6 +66,10 @@
                                     <option value="belum" selected>Belum Dilegalisasi</option>
                                 </select>
                             </div>
+                            <div class="col-md-5 mb-3">
+                                <label class="form-label">Nomor Dokumen</label>
+                                <input type="text" class="form-control" name="nomor_dokumen" required value="{{ old('nomor_dokumen') }}" placeholder="Nomor Dokumen">
+                            </div>
                             <div class="col-md-2 mb-3">
                                 <label class="form-label">Type</label>
                                 <select name="type" class="form-control" required>
@@ -73,13 +77,17 @@
                                     <option value="asli">Asli</option>
                                 </select>
                             </div>
-                            <div class="col-md-7 mb-3">
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">Masa Aktif <strong class="text-danger">*(Tahun)</strong></label>
+                                <input type="number" class="form-control" name="masa_aktif" required value="{{ old('masa_aktif') }}" placeholder="Contoh : 2">
+                            </div>
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label">Upload File (*.pdf) (Max : 3 MB)</label>
                                 <input type="file" name="nama_file" class="form-control" required accept=".pdf">
                             </div>
                             <div class="col-md-12 mb-3">
                                 <label class="form-label">Uraian</label>
-                                <input type="text" name="uraian" class="form-control" required value="{{ old('uraian') }}">
+                                <textarea name="uraian" class="form-control" required>{{ old('uraian') }}</textarea>
                             </div>
                         </div>
                     </div>

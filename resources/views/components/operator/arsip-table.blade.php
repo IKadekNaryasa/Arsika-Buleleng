@@ -21,7 +21,7 @@
                             <th style="font-size: small;">Klasifikasi</th>
                             <th style="font-size: small;">Uraian</th>
                             <th style="font-size: small;">Legalisasi</th>
-                            <th style="font-size: small;">Type</th>
+                            <th style="font-size: small;">Nomor</th>
                             <th style="font-size: small;" class="text-center">Action</th>
                         </tr>
                     </thead>
@@ -39,9 +39,9 @@
                                 <span class="badge bg-success">{{ $arsip->status_legalisasi }}</span>
                                 @endif
                             </td>
-                            <td style="font-size: small;">{{ $arsip->type }}</td>
-                            <td style="font-size: small;" class="justify-content-center d-flex">
-                                <ul class="list-unstyled d-flex mb-0">
+                            <td style="font-size: small;">{{ $arsip->nomor_dokumen }}</td>
+                            <td style="font-size: small;" class="text-center">
+                                <div class="list-unstyled d-flex mb-0">
                                     <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="left" class="pull-up" title="Pratinjau">
                                         <a href="{{ route('arsip.show', $arsip->id) }}?v={{ $arsip->updated_at->timestamp }}" target="_blank" class="mx-2 text-primary">
                                             <i class='bx bxs-show'></i>
@@ -57,7 +57,7 @@
                                             <i class='bx bxs-trash'></i>
                                         </button>
                                     </li>
-                                </ul>
+                                </div>
 
                                 <form method="POST" id="deleteForm_{{ $arsip->id }}" action="{{ route('arsip.destroy', $arsip->id) }}" style="display: none;">
                                     @csrf
@@ -72,7 +72,7 @@
                                                 <h5 class="modal-title">Detail Arsip {{ $arsip->kode_arsip }}</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
-                                            <div class="modal-body">
+                                            <div class="modal-body text-start">
                                                 <div class="container">
                                                     <div class="row mb-2">
                                                         <div class="col-4 fw-bold">Kode Arsip</div>
@@ -87,8 +87,16 @@
                                                         <div class="col-8">: {{ $arsip->kodeKlasifikasi->kode }}</div>
                                                     </div>
                                                     <div class="row mb-2">
+                                                        <div class="col-4 fw-bold">Nomor Dokumen</div>
+                                                        <div class="col-8">: {{ $arsip->nomor_dokumen }}</div>
+                                                    </div>
+                                                    <div class="row mb-2">
                                                         <div class="col-4 fw-bold">Tanggal Arsip</div>
                                                         <div class="col-8">: {{ $arsip->tanggal_arsip }}</div>
+                                                    </div>
+                                                    <div class="row mb-2">
+                                                        <div class="col-4 fw-bold">Masa Aktif</div>
+                                                        <div class="col-8">: {{ $arsip->masa_aktif }} Tahun</div>
                                                     </div>
                                                     <div class="row mb-2">
                                                         <div class="col-4 fw-bold">Nama File</div>
@@ -114,23 +122,8 @@
                                                         <div class="col-4 fw-bold">Uraian</div>
                                                         <div class="col-8">: {{ $arsip->uraian }}</div>
                                                     </div>
-                                                    <div class="row mb-2">
-                                                        <div class="col-4 fw-bold">Pratinjau</div>
-                                                        <div class="col-8">:
-                                                            <a href="{{ route('arsip.show', $arsip->id) }}?v={{ $arsip->updated_at->timestamp }}" target="_blank" class="mx-2 text-primary">
-                                                                <i class='bx bxs-show'></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
+
                                                     <hr>
-                                                    @if ($arsip->status_legalisasi == 'onProgress')
-                                                    <!-- <div class="row mb-2">
-                                                        <form action="" method="">
-                                                            @csrf
-                                                            <div class="col-12"><strong>LEGALISASI</strong> : <button class="btn btn-primary btn-sm">Tambahkan Legalisasi</button></div>
-                                                        </form>
-                                                    </div> -->
-                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
