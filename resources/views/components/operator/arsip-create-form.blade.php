@@ -1,14 +1,28 @@
 @props(['klasifikasies'])
+
 {{-- Loading Overlay --}}
-<div id="loadingOverlay" class="loading-overlay d-none">
-    <div class="loading-content">
-        <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-        <h5 class="text-primary">Menyimpan Arsip...</h5>
-        <p class="text-muted">Mohon tunggu, sedang mengupload file!</p>
-    </div>
-</div>
+<x-overlay></x-overlay>
+
+<style>
+    .select2-container--default .select2-selection--single {
+        height: 38px;
+        padding: 6px 12px;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 24px;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 36px;
+    }
+
+    .select2-dropdown {
+        border: 1px solid #ced4da;
+    }
+</style>
 
 <div class="row">
     <div class="card mb-4">
@@ -35,8 +49,8 @@
                             </div>
                             <div class="col-md-7 mb-3">
                                 <label class="form-label">Kode Klasifikasi</label>
-                                <select name="klasifikasi_id" class="form-control" required>
-                                    <option selected disabled>Choose...</option>
+                                <select name="klasifikasi_id" id="klasifikasiSelect" class="form-control" required>
+                                    <option value="" disabled selected>Pilih atau ketik kode/keterangan...</option>
                                     @foreach ($klasifikasies as $klasifikasi)
                                     <option value="{{ $klasifikasi->id }}">{{ $klasifikasi->kode }} - {{ $klasifikasi->keterangan }}</option>
                                     @endforeach
@@ -55,8 +69,8 @@
                             <div class="col-md-2 mb-3">
                                 <label class="form-label">Type</label>
                                 <select name="type" class="form-control" required>
-                                    <option value="asli" selected>Asli</option>
-                                    <option value="copy">Copy</option>
+                                    <option value="copy" selected>Copy</option>
+                                    <option value="asli">Asli</option>
                                 </select>
                             </div>
                             <div class="col-md-7 mb-3">
@@ -70,8 +84,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12 text-center">
+                <div class="row justify-content-center">
+                    <div class="col-md-4 text-center">
                         <button type="submit" name="submit" id="submitBtn" class="btn btn-success w-50">
                             <span id="submitText">Submit</span>
                             <span id="submitSpinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status"></span>
@@ -83,51 +97,32 @@
     </div>
 </div>
 
-<style>
-    .loading-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.7);
-        z-index: 9999;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .loading-content {
-        text-align: center;
-        background-color: white;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    }
-
-    .form-disabled {
-        pointer-events: none;
-        opacity: 0.6;
-    }
-</style>
-
+@push('script')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        let formIndex = 1;
-        const formContainer = document.getElementById('formContainer');
-        const arsipForm = document.getElementById('arsipForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const submitText = document.getElementById('submitText');
-        const submitSpinner = document.getElementById('submitSpinner');
-        const loadingOverlay = document.getElementById('loadingOverlay');
+    const arsipForm = document.getElementById('arsipForm');
 
-        arsipForm.addEventListener('submit', function(e) {
-            loadingOverlay.classList.remove('d-none');
-            arsipForm.classList.add('form-disabled');
-            submitBtn.disabled = true;
-            submitText.textContent = 'Menyimpan arsip, mohon tunggu...';
-            submitSpinner.classList.remove('d-none');
+    $(document).ready(function() {
+        $('#klasifikasiSelect').select2({
+            placeholder: 'Pilih atau ketik kode/keterangan...',
+            allowClear: true,
+            width: '100%',
+            language: {
+                noResults: function() {
+                    return "Kode klasifikasi tidak ditemukan";
+                },
+                searching: function() {
+                    return "Mencari...";
+                }
+            }
         });
+    });
 
+    arsipForm.addEventListener('submit', function(e) {
+        loadingOverlay.classList.remove('d-none');
+        arsipForm.classList.add('form-disabled');
+        submitBtn.disabled = true;
+        submitText.textContent = 'Menyimpan arsip, mohon tunggu...';
+        submitSpinner.classList.remove('d-none');
     });
 </script>
+@endpush
