@@ -63,7 +63,7 @@
                             <td style="font-size: small;">{{ $arsip->type }}</td>
                             <td style="font-size: small;">{{ $arsip->user->bidang->kode_bidang }}</td>
                             <td style="font-size: small;" class="justify-content-center d-flex">
-                                <ul class="list-unstyled d-flex mb-0 align-middle">
+                                <div class="list-unstyled d-flex mb-0 align-middle">
                                     <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="left" class="pull-up" title="Pratinjau">
                                         <a href="{{ route('legalizer.arsip.show', $arsip->id) }}" target="_blank" class="mx-2 text-primary">
                                             <i class='bx bxs-show'></i>
@@ -149,7 +149,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </ul>
+                                </div>
                             </td>
                         </tr>
 

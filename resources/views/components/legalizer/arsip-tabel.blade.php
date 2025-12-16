@@ -34,7 +34,7 @@
                             <td style="font-size: small;">{{ $arsip->type }}</td>
                             <td style="font-size: small;">{{ $arsip->user->bidang->kode_bidang }}</td>
                             <td style="font-size: small;" class="justify-content-center d-flex">
-                                <ul class="list-unstyled d-flex mb-0">
+                                <div class="list-unstyled d-flex mb-0">
                                     <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="left" class="pull-up" title="Pratinjau">
                                         <a href="{{ route('legalizer.arsip.show', $arsip->id) }}?v={{ $arsip->updated_at->timestamp }}" target="_blank" class="mx-2 text-primary">
                                             <i class='bx bxs-show'></i>
@@ -45,7 +45,7 @@
                                             <i class='bx bxs-info-circle'></i>
                                         </button>
                                     </li>
-                                </ul>
+                                </div>
                             </td>
                         </tr>
                         @endforeach
