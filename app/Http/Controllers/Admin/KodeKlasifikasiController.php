@@ -60,7 +60,7 @@ class KodeKlasifikasiController extends Controller
         try {
             KodeKlasifikasi::create([
                 'kode' => $credential['kode'],
-                'keterangan' => ucwords(strtolower($credential['keterangan'])),
+                'keterangan' => $credential['keterangan'],
             ]);
 
             return redirect()->route('admin.klasifikasi.index')->with('success', 'Success, New bidang created!');
@@ -130,7 +130,7 @@ class KodeKlasifikasiController extends Controller
         try {
             $klasifikasi->update([
                 'kode' => $credential['kode'],
-                'keterangan' => ucwords(strtolower($credential['keterangan'])),
+                'keterangan' => $credential['keterangan'],
             ]);
 
             return redirect()->route('admin.klasifikasi.index')->with('success', 'Success, Kode Klasifikasi Updated!');
