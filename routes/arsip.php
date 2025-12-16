@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Legalizer\ArsipController as LegalizerArsipController;
 use App\Http\Controllers\Operator\ArsipController;
 use App\Http\Middleware\ArsikaAuth;
@@ -7,6 +8,9 @@ use App\Http\Middleware\ArsikaLegalizer;
 use App\Http\Middleware\ArsikaOperator;
 use Illuminate\Support\Facades\Route;
 
+
+Route::get('/cek-legalisasi/{id}', [HomeController::class, 'cekLegalisasi'])->name('arsip.cekLegalisasi');
+Route::get('/arsip/{arsip}/show', [HomeController::class, 'show'])->name('home.arsip.show');
 Route::middleware(ArsikaAuth::class)->group(function () {
 
     Route::middleware(ArsikaOperator::class)->group(function () {

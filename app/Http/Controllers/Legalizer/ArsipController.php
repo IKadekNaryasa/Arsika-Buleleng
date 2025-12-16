@@ -174,14 +174,38 @@ class ArsipController extends Controller
         file_put_contents($pdfSource, Storage::disk('google')->get($arsip->path_file));
 
         $outputPdf = storage_path('app/legalized_' . Str::random(10) . '.pdf');
-        $qrImage   = storage_path('app/temp_qr.png');
+        $qrImageWatermark = storage_path('app/temp_qr_watermark.png');
+        $qrImageSmall = storage_path('app/temp_qr_small.png');
 
-        $qrContent = $arsip->kode_arsip . ' | ' . $arsip->kategori . ' | ' . $arsip->tanggal_arsip . ' | ' . $arsip->user->bidang->kode_bidang;
-        $qrCode = new QrCode($qrContent);
-        $qrCode->setSize(100);
+        $qrContent = route('arsip.cekLegalisasi', $arsip->id);
+
+        $qrCodeWatermark = QrCode::create($qrContent)
+            ->setSize(300)
+            ->setMargin(10)
+            ->setErrorCorrectionLevel(new \Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh());
+
+        $logoPath = public_path('img/logo.png');
+        $logoWatermark = \Endroid\QrCode\Logo\Logo::create($logoPath)
+            ->setResizeToWidth(60);
 
         $writer = new PngWriter();
-        $writer->write($qrCode)->saveToFile($qrImage);
+        $result = $writer->write($qrCodeWatermark, $logoWatermark);
+        $result->saveToFile($qrImageWatermark);
+
+        $this->makeImageTransparent($qrImageWatermark, 0.2);
+
+        $qrCodeSmall = QrCode::create($qrContent)
+            ->setSize(120)
+            ->setMargin(10)
+            ->setErrorCorrectionLevel(new \Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh());
+
+        $logoSmall = \Endroid\QrCode\Logo\Logo::create($logoPath)
+            ->setResizeToWidth(20);
+
+        $resultSmall = $writer->write($qrCodeSmall, $logoSmall);
+        $resultSmall->saveToFile($qrImageSmall);
+
+        $this->makeImageTransparent($qrImageSmall, 0.7);
 
         $pdf = new Fpdi();
         $pageCount = $pdf->setSourceFile($pdfSource);
@@ -193,13 +217,20 @@ class ArsipController extends Controller
             $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
             $pdf->useTemplate($tplIdx);
 
-            $x = $size['width'] - 20;
-            $y = 0;
-            $pdf->Image($qrImage, $x, $y, 20, 20);
+            $qrDisplaySize = 80;
+            $x = ($size['width'] - $qrDisplaySize) / 2;
+            $y = ($size['height'] - $qrDisplaySize) / 2;
+            $pdf->Image($qrImageWatermark, $x, $y, $qrDisplaySize, $qrDisplaySize);
+
+            if ($pageNo == $pageCount) {
+                $xSmall = $size['width'] - 25;
+                $ySmall = 5;
+
+                $pdf->Image($qrImageSmall, $xSmall, $ySmall, 20, 20);
+            }
         }
 
         $pdf->Output($outputPdf, 'F');
-
 
         $fileName = 'Legal/' . $kode_arsip . '-' . $arsip->nama_file;
         Storage::disk('google')->put($fileName, file_get_contents($outputPdf));
@@ -213,8 +244,55 @@ class ArsipController extends Controller
 
         unlink($pdfSource);
         unlink($outputPdf);
-        unlink($qrImage);
+        unlink($qrImageWatermark);
+        unlink($qrImageSmall);
 
         return redirect()->back()->with('success', 'Legalisasi Berhasil!');
+    }
+
+    private function makeImageTransparent($imagePath, $opacity = 0.3)
+    {
+        $image = imagecreatefrompng($imagePath);
+
+        $width = imagesx($image);
+        $height = imagesy($image);
+
+        $transparent = imagecreatetruecolor($width, $height);
+
+        imagealphablending($transparent, false);
+        imagesavealpha($transparent, true);
+
+        $transparentColor = imagecolorallocatealpha($transparent, 255, 255, 255, 127);
+        imagefill($transparent, 0, 0, $transparentColor);
+
+        imagealphablending($transparent, true);
+
+        for ($x = 0; $x < $width; $x++) {
+            for ($y = 0; $y < $height; $y++) {
+                $rgb = imagecolorat($image, $x, $y);
+                $colors = imagecolorsforindex($image, $rgb);
+
+                $newAlpha = 127 - (127 * $opacity);
+
+                if ($colors['red'] < 128 && $colors['green'] < 128 && $colors['blue'] < 128) {
+                    $newColor = imagecolorallocatealpha(
+                        $transparent,
+                        $colors['red'],
+                        $colors['green'],
+                        $colors['blue'],
+                        $newAlpha
+                    );
+                    imagesetpixel($transparent, $x, $y, $newColor);
+                } else {
+                    $whiteTransparent = imagecolorallocatealpha($transparent, 255, 255, 255, 127);
+                    imagesetpixel($transparent, $x, $y, $whiteTransparent);
+                }
+            }
+        }
+
+        imagepng($transparent, $imagePath);
+
+        imagedestroy($image);
+        imagedestroy($transparent);
     }
 }
