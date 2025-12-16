@@ -21,7 +21,7 @@
                             <td style="font-size: small;">{{ $loop->iteration }}</td>
                             <td style="font-size: small;">{{ $klasifikasi->kode }}</td>
                             <td style="font-size: small;">{{ $klasifikasi->keterangan }}</td>
-                            <td style="font-size: small;" class="justify-content-center d-flex">
+                            <td style="font-size: small;" class="text-center">
                                 <div class="list-unstyled text-center">
                                     <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="left" class="pull-up" title="edit">
                                         <a href="{{ route('admin.klasifikasi.edit',['klasifikasi' => $klasifikasi->id]) }}" class="mx-2 text-warning">
