@@ -63,7 +63,7 @@
                             <td style="font-size: small;">{{ $arsip->type }}</td>
                             <td style="font-size: small;">{{ $arsip->user->bidang->kode_bidang }}</td>
                             <td style="font-size: small;" class="text-center">
-                                <div class="list-unstyled d-flex mb-0 align-middle">
+                                <div class="list-unstyled d-flex mb-0 text-start">
                                     <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="left" class="pull-up" title="Pratinjau">
                                         <a href="{{ route('legalizer.arsip.show', $arsip->id) }}" target="_blank" class="mx-2 text-primary">
                                             <i class='bx bxs-show'></i>
@@ -123,14 +123,6 @@
                                                         <div class="row mb-2">
                                                             <div class="col-4 fw-bold">Uraian</div>
                                                             <div class="col-8">: {{ $arsip->uraian }}</div>
-                                                        </div>
-                                                        <div class="row mb-2">
-                                                            <div class="col-4 fw-bold">Pratinjau</div>
-                                                            <div class="col-8">:
-                                                                <a href="{{ route('legalizer.arsip.show', $arsip->id) }}?v={{ $arsip->updated_at->timestamp }}" target="_blank" class="mx-2 text-primary">
-                                                                    <i class='bx bxs-show'></i>
-                                                                </a>
-                                                            </div>
                                                         </div>
                                                         <hr>
                                                         <div class="row mb-2">
