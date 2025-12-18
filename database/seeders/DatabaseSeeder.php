@@ -64,7 +64,19 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             GoogleAccessTokenSeeder::class,
-            KodeKlasifikasiSeeder::class
+            KodeKlasifikasi000Seeder::class,
+            KodeKlasifikasi100Seeder::class,
+            KodeKlasifikasi200Seeder::class,
+            KodeKlasifikasi300Seeder::class,
+            KodeKlasifikasi400Seeder::class,
+            KodeKlasifikasi400P2Seeder::class,
+            KodeKlasifikasi500Seeder::class,
+            KodeKlasifikasi500P2Seeder::class,
+            KodeKlasifikasi500P3Seeder::class,
+            KodeKlasifikasi600Seeder::class,
+            KodeKlasifikasi700Seeder::class,
+            KodeKlasifikasi800Seeder::class,
+            KodeKlasifikasi900Seeder::class,
         ]);
     }
 }
