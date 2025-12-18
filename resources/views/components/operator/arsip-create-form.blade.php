@@ -1,6 +1,3 @@
-@props(['klasifikasies'])
-
-{{-- Loading Overlay --}}
 <x-overlay></x-overlay>
 
 <style>
@@ -50,10 +47,7 @@
                             <div class="col-md-7 mb-3">
                                 <label class="form-label">Kode Klasifikasi</label>
                                 <select name="klasifikasi_id" id="klasifikasiSelect" class="form-control" required>
-                                    <option value="" disabled selected>Pilih atau ketik kode/keterangan...</option>
-                                    @foreach ($klasifikasies as $klasifikasi)
-                                    <option value="{{ $klasifikasi->id }}">{{ $klasifikasi->kode }} - {{ $klasifikasi->keterangan }}</option>
-                                    @endforeach
+                                    <option value="" disabled selected>Ketik untuk mencari...</option>
                                 </select>
                             </div>
                             <div class="col-md-3 mb-3">
@@ -111,10 +105,30 @@
 
     $(document).ready(function() {
         $('#klasifikasiSelect').select2({
-            placeholder: 'Pilih atau ketik kode/keterangan...',
+            placeholder: 'Ketik kode atau keterangan untuk mencari...',
             allowClear: true,
             width: '100%',
+            minimumInputLength: 2,
+            ajax: {
+                url: '{{ route("klasifikasi.search") }}',
+                dataType: 'json',
+                delay: 100,
+                data: function(params) {
+                    return {
+                        search: params.term
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: data.results
+                    };
+                },
+                cache: true
+            },
             language: {
+                inputTooShort: function() {
+                    return "Ketik minimal 2 karakter untuk mencari";
+                },
                 noResults: function() {
                     return "Kode klasifikasi tidak ditemukan";
                 },

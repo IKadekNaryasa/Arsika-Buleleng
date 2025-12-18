@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(ArsikaAuth::class)->group(function () {
 
+    Route::get('/klasifikasi/search', [ArsipController::class, 'searchKlasifikasi'])->name('klasifikasi.search');
     // Admin
     Route::middleware(ArsikaAdmin::class)->group(function () {
         Route::prefix('admin')->name('admin.')->group(function () {

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('arsips', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('kode_arsip', 100)->unique()->index('arsip_kodeArsip');
+            $table->string('kode_arsip', 100)->unique()->index('arsip_kodeArsip')->index('kodeArsipIndex');
             $table->enum('kategori', ['arsip_aktif', 'arsip_inAktif', 'lainnya'])->default('arsip_aktif');
             $table->foreignUuid('klasifikasi_id')->constrained('kode_klasifikasis', 'id')->cascadeOnDelete()->cascadeOnUpdate();
             $table->date('tanggal_arsip');

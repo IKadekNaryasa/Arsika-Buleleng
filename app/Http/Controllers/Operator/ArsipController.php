@@ -50,15 +50,36 @@ class ArsipController extends Controller
     public function create()
     {
         $bidangs = Bidang::all();
-        $klasifikasies = KodeKlasifikasi::all();
         $data = [
             'active' => 'createArsip',
             'open' => 'arsip',
             'link' => 'Arsip | Tambah Arsip',
             'bidangs' => $bidangs,
-            'klasifikasies' => $klasifikasies
         ];
         return view('operator.arsip.create', $data);
+    }
+
+    public function searchKlasifikasi(Request $request)
+    {
+        $search = $request->search;
+
+        $klasifikasies = KodeKlasifikasi::select('id', 'kode', 'keterangan')
+            ->where(function ($query) use ($search) {
+                $query->where('kode', 'like', "%{$search}%")
+                    ->orWhere('keterangan', 'like', "%{$search}%");
+            })
+            ->limit(50)
+            ->get();
+
+        $results = [];
+        foreach ($klasifikasies as $klasifikasi) {
+            $results[] = [
+                'id' => $klasifikasi->id,
+                'text' => $klasifikasi->kode . ' - ' . $klasifikasi->keterangan
+            ];
+        }
+
+        return response()->json(['results' => $results]);
     }
 
     /**

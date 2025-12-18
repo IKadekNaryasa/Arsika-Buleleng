@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\KodeKlasifikasi;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 
 class KodeKlasifikasiController extends Controller
@@ -14,14 +15,31 @@ class KodeKlasifikasiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $klasifikasies = KodeKlasifikasi::all();
+        if ($request->ajax()) {
+            $klasifikasies = KodeKlasifikasi::select(['id', 'kode', 'keterangan']);
+
+            return DataTables::of($klasifikasies)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    return '<div class="text-center">
+                            <a href="' . route('admin.klasifikasi.edit', $row->id) . '" 
+                               class="mx-2 text-warning"
+                               data-bs-toggle="tooltip" 
+                               title="Edit">
+                                <i class="bx bxs-edit"></i>
+                            </a>
+                        </div>';
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
         $data = [
             'active' => 'dataKlasifikasi',
             'open' => 'klasifikasi',
             'link' => 'Data Kode Klasifikasi',
-            'klasifikasies' => $klasifikasies
         ];
 
         return view('admin.klasifikasi.index', $data);
