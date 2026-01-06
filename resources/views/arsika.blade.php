@@ -20,7 +20,7 @@
         <div class="container mx-auto px-4 sm:px-6 py-3 sm:py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-2 sm:space-x-3">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-600 to-blue-400 rounded-lg flex items-center justify-center shrink-0">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-linear-to-br from-blue-600 to-blue-400 rounded-lg flex items-center justify-center shrink-0">
                         <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
@@ -84,7 +84,7 @@
 
                 <aside class="relative order-first lg:order-last flex justify-center lg:justify-end">
                     <div class="relative z-10">
-                        <img src="{{ asset('img/arsika.png') }}" alt="ARSIKA Buleleng - Sistem Arsip Digital Kesbangpol" class="w-80 h-auto drop-shadow-2xl" width="320" height="320" />
+                        <img src="{{ asset('img/arsika.png') }}" loading="lazy" alt="ARSIKA Buleleng - Sistem Arsip Digital Kesbangpol" class="w-80 h-auto drop-shadow-2xl" width="320" height="320" />
                     </div>
                     <div class="absolute top-10 right-10 w-16 h-16 sm:w-20 sm:h-20 bg-blue-200 rounded-full opacity-50 animate-pulse" aria-hidden="true"></div>
                     <div class="absolute bottom-10 left-10 w-12 h-12 sm:w-16 sm:h-16 bg-orange-200 rounded-full opacity-50 animate-pulse" style="animation-delay: 1s" aria-hidden="true"></div>
