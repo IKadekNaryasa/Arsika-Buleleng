@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\GoogleAccessToken;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use App\Observers\GoogleAccessTokenObserver;
@@ -22,5 +23,10 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void {}
+    public function boot(): void
+    {
+        if (env('APP_ENV') === 'production') {
+            URL::forceScheme('https');
+        }
+    }
 }
