@@ -12,7 +12,7 @@ return [
             'description'  => 'Sistem informasi yang dirancang untuk mengelola dan menyimpan data Arsip Kesbangpol Buleleng secara digital dan terstruktur. Dilengkapi dengan fitur sinkronisasi Google Drive.',
             'separator'    => ' - ',
             'keywords'     => ['ARSIKA Buleleng', 'Arsip Digital', 'Kesbangpol Buleleng', 'Sistem Informasi Arsip', 'Badan Kesatuan Bangsa dan Politik Buleleng', 'Arsip Digital Pemerintah'],
-            'canonical'    => env('APP_URL', 'https://arsika-buleleng.iknproject.site'),
+            'canonical'    => env('APP_URL', 'https://arsika.bkbp.site'),
             'robots'       => 'index, follow',
         ],
         'webmaster_tags' => [
@@ -28,7 +28,7 @@ return [
         'defaults' => [
             'title'       => 'ARSIKA Buleleng - Arsip Digital Kesbangpol Buleleng',
             'description' => 'Sistem informasi yang dirancang untuk mengelola dan menyimpan data Arsip Kesbangpol Buleleng secara digital dan terstruktur.',
-            'url'         => env('APP_URL', 'https://arsika-buleleng.iknproject.site'),
+            'url'         => env('APP_URL', 'https://arsika.bkbp.site'),
             'type'        => 'website',
             'site_name'   => 'ARSIKA Buleleng',
             'images'      => [],
@@ -44,7 +44,7 @@ return [
         'defaults' => [
             'title'       => 'ARSIKA Buleleng',
             'description' => 'Sistem informasi untuk mengelola dan menyimpan data Arsip Kesbangpol Buleleng secara digital.',
-            'url'         => env('APP_URL', 'https://arsika-buleleng.iknproject.site'),
+            'url'         => env('APP_URL', 'https://arsika.bkbp.site'),
             'type'        => 'WebPage',
             'images'      => [],
         ],
