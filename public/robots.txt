@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://arsika-buleleng.iknproject.site/sitemap.xml
+Sitemap: https://arsika.bkbp.site/sitemap.xml

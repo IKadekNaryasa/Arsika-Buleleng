@@ -2,12 +2,12 @@
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
   <url>
-    <loc>https://arsika-buleleng.iknproject.site/</loc>
+    <loc>https://arsika.bkbp.site/</loc>
     <lastmod>2025-11-26T23:52:11+00:00</lastmod>
     <priority>1.00</priority>
   </url>
   <url>
-    <loc>https://arsika-buleleng.iknproject.site/login</loc>
+    <loc>https://arsika.bkbp.site/login</loc>
     <lastmod>2025-11-26T23:52:11+00:00</lastmod>
     <priority>0.80</priority>
   </url>
