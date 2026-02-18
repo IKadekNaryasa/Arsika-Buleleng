@@ -309,7 +309,7 @@ class ArsipController extends Controller
     }
 
 
-    public function cetak(Request $request)
+    public function cetak2(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'tahun' => 'required|numeric',
@@ -388,6 +388,75 @@ class ArsipController extends Controller
             'sekban' => $sekban,
             'jabatan' => $jabatan,
             'nip' => $user->nip,
+            'tanggalCetak' => now()->format('d-m-Y')
+        ]);
+
+        $pdf->setPaper('a4', 'landscape');
+
+        return $pdf->stream('Laporan-Arsip-' . $kodeBidang . '-' . $tahun . '.pdf');
+    }
+    public function cetak(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'tahun' => 'required|numeric',
+            'sekban' => 'required|string',
+            'legalizer' => 'required'
+        ], [
+            'tahun.required' => 'The year is required',
+            'tahun.numeric' => 'The year must be a number',
+            'sekban.required' => 'The sekban is required',
+            'sekban.string' => 'The sekban must be a string',
+            'legalizer.required' => 'The legalizer is required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+
+        $credential = $validator->validated();
+
+        $tahun = $credential['tahun'];
+        $sekban = $credential['sekban'];
+        $legalizerId = $credential['legalizer'];
+        $user = User::where('id', $legalizerId)->firstOrFail();
+        $legalizer = $user->name;
+        $jabatan = $user->jabatan;
+
+        $bidangId = Auth::user()->bidang_id;
+        $bidangNama = Auth::user()->bidang->nama_bidang ?? 'Bidang';
+        $kodeBidang = Auth::user()->bidang->kode_bidang;
+
+        $arsips = Arsip::with(['kodeKlasifikasi', 'user'])
+            ->whereHas('user', function ($query) use ($bidangId) {
+                $query->where('bidang_id', $bidangId);
+            })
+            ->whereYear('tanggal_arsip', $tahun)
+            ->orderBy('tanggal_arsip')
+            ->get();
+
+        $formattedData = $arsips->map(function ($item, $index) use ($tahun) {
+            return [
+                'no'               => $index + 1,
+                'kode_klasifikasi' => $item->kodeKlasifikasi->kode ?? '',
+                'uraian'           => $item->uraian,
+                'keterangan'       => $item->kodeKlasifikasi->keterangan ?? '',
+                'kurun_waktu'      => $tahun,
+                'jumlah'           => 1,
+                'ket'              => ucfirst($item->type),
+            ];
+        })->values()->all();
+
+        $grandTotal = count($formattedData);
+
+        $pdf = PDF::loadView('operator.arsip.cetak_laporan', [
+            'dataLaporan' => $formattedData,
+            'grandTotal'  => $grandTotal,
+            'tahun'       => $tahun,
+            'bidangNama'  => $bidangNama,
+            'legalizer'   => $legalizer,
+            'sekban'      => $sekban,
+            'jabatan'     => $jabatan,
+            'nip'         => $user->nip,
             'tanggalCetak' => now()->format('d-m-Y')
         ]);
 
